@@ -12,7 +12,7 @@ public class Client {
     static void printMenu(){
 
         System.out.print("###############TIMETRACKER###############\n");
-        System.out.print("# Caso 1 : Crear nuevo intervalo        #\n");
+        System.out.print("# Caso 1 : Crear nueva Tarea            #\n");
         System.out.print("# Caso 2 : Salir de timeTracker         #\n");
         System.out.print("#########################################\n");
         System.out.print("Ingrese el numero del caso que desea: \n");
@@ -33,16 +33,15 @@ public class Client {
         //Seleccion de la opción
         switch(caso) {
             case 1:
-                // Crear nuevo intervalo (no tienen nombre, mientras las tareas y los proyectos si lo tienen)
-                Interval i = new Interval();
-                i.displayFechaCreacion();
+                //Crear nueva Tarea
+                Task t = new Task();
                 break;
             case 2:
                 // Salir del TimeTracker
                 menuActivo = false;
                 break;
             default:
-                // Opción no valida, introduzca otra
+                // Opcion no valida, introduzca otra
         }
 
         return menuActivo;

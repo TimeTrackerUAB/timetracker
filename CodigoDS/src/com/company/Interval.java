@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 
 public class Interval {
 
-    LocalDateTime fechaCreacion;
+    //LocalDateTime fechaCreacion;
     LocalDateTime fechaInicio;
     LocalDateTime fechaPausaProvisional;
     LocalDateTime fechaFinal;
 
      Interval(){//Contructor del Intervalo
-        fechaCreacion = LocalDateTime.now();
+       // fechaCreacion = LocalDateTime.now();
     }
 
     //Setters
@@ -18,9 +18,7 @@ public class Interval {
         fechaPausaProvisional = LocalDateTime.now();
     }
 
-    public void creacionInicial(){
-        fechaCreacion = LocalDateTime.now();
-    }
+    //public void creacionInicial(){ fechaCreacion = LocalDateTime.now(); }
 
     public void iniciar(){
         fechaInicio = LocalDateTime.now();
@@ -33,11 +31,11 @@ public class Interval {
     }
 
     //GetterS
-    public LocalDateTime getFechaCreacion(){ return fechaCreacion;}
+    //public LocalDateTime getFechaCreacion(){ return fechaCreacion;}
     public LocalDateTime getFechaInicio(){ return fechaInicio;}
     public LocalDateTime getFechaPausaProvisional(){ return fechaPausaProvisional;}
     public LocalDateTime getFechaFinal(){ return fechaFinal;}
 
     //Displays
-    public void displayFechaCreacion(){ System.out.print(getFechaCreacion()+"\n");}
+    //public void displayFechaCreacion(){ System.out.print(getFechaCreacion()+"\n");}
 }
