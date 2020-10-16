@@ -42,7 +42,7 @@ public class Client {
                 menuActivo = false;
                 break;
             default:
-                // Opcion no valida, introduzca otra
+                // Opción no valida, introduzca otra
         }
 
         return menuActivo;
