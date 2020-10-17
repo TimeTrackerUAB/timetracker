@@ -2,14 +2,14 @@ package com.company;
 
 
 public class Activity {
-    String nombre;
-    boolean padre;
+    String name;
+    Activity father;
 
     //Setters
-    public void setNombre(String n){ nombre = n; }
-    public void setPadre(boolean p){ padre = p; }
+    public void setName(String n){ name = n; }
+    public void setFather(Activity f){ father = f; }
 
     //Getters
-    public String getNombre(){ return nombre; }
-    public boolean getPadre(){ return padre; }
+    public String getName(){ return name; }
+    public Activity getFather(){ return father; }
 }
