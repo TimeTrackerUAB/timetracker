@@ -34,7 +34,7 @@ public class Client {
         switch(caso) {
             case 1:
                 //Crear nueva Tarea
-                Task t = new Task();
+                //Task t = new Task();
                 break;
             case 2:
                 // Salir del TimeTracker
@@ -49,30 +49,38 @@ public class Client {
 
     public static void startTest(){
 
-
         Project root = new Project("root", "", null);
         Project P1 = new Project("software design", "", root);
         Project P2 = new Project("software testing", "", root);
         Project P3 = new Project("databases", "", root);
         Project P4 = new Project("task transportation", "", root);
-        Task T1 = new Task("problems", "", P1);
-        Task T2 = new Task("project time tracker", "", P1);
-        Task T3 = new Task("first list", "", T1.father);
-        Task T4 = new Task("second list", "", T1.father);
-        Task T5 = new Task("read handout", "", T2.father);
-        Task T6 = new Task("first milestone", "", T2.father);
+        Project P5 = new Project("problems", "", P1);
+        Project P6 = new Project("project time tracker", "", P1);
+        Task T1 = new Task("first list", "", P5);
+        Task T2 = new Task("second list", "", P5);
+        Task T3 = new Task("read handout", "", P6);
+        Task T4 = new Task("first milestone", "", P6);
+
+
+
     }
 
     public static void main(String[] args) {
         // Main
+
+        Clock clock = Clock.getInstance();
+        int period = 2000;
+        clock.initialize(period);
+
+        /*
         boolean menuActivo = true;
 
         do {
             menuActivo = menuCliente();
 
         } while (menuActivo != false);
-
-        System.exit(0);
+           */
+        //System.exit(0);
     }
 
 

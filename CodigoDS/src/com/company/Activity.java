@@ -7,7 +7,7 @@ public class Activity {
   protected String description;
   protected LocalDateTime initialDate;
   protected LocalDateTime finalDate;
-  protected float duration;
+  protected int duration;
   protected Project father;
 
   public Activity(String activityName, String activityDescription, Project fatherProject){
@@ -24,19 +24,23 @@ public class Activity {
   //Getters
   public String getName(){return name;}
   public String getDescription(){return description;}
-  public float getDuration(){return duration;}
+  public int getDuration(){return duration;}
   public Project getFather() {return father;}
   public LocalDateTime getInitialDate() {return initialDate;}
   public LocalDateTime getFinalDate() {return finalDate;}
 
   //Setters
-  public LocalDateTime setInitialDate(LocalDateTime date){
+  public void setInitialDate(LocalDateTime date){
     initialDate = date;
     if(father != null){
       if (father.getInitialDate() == null){
         father.setInitialDate(date);
       }
     }
+  }
+
+  public void printTree(){
+
   }
 
 }
