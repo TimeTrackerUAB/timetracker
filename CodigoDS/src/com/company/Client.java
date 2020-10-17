@@ -47,4 +47,33 @@ public class Client {
         return menuActivo;
     }
 
+    public static void startTest(){
+
+
+        Project root = new Project("root", "", null);
+        Project P1 = new Project("software design", "", root);
+        Project P2 = new Project("software testing", "", root);
+        Project P3 = new Project("databases", "", root);
+        Project P4 = new Project("task transportation", "", root);
+        Task T1 = new Task("problems", "", P1);
+        Task T2 = new Task("project time tracker", "", P1);
+        Task T3 = new Task("first list", "", T1.father);
+        Task T4 = new Task("second list", "", T1.father);
+        Task T5 = new Task("read handout", "", T2.father);
+        Task T6 = new Task("first milestone", "", T2.father);
+    }
+
+    public static void main(String[] args) {
+        // Main
+        boolean menuActivo = true;
+
+        do {
+            menuActivo = menuCliente();
+
+        } while (menuActivo != false);
+
+        System.exit(0);
+    }
+
+
 }

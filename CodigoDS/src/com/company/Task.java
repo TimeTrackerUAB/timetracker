@@ -4,39 +4,24 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
-public class Task {
+public class Task extends Activity{
 
-    List<Interval> Intervalos;
-    String nombreTarea;
+    private ArrayList<Interval> intervalList;
+    private int nIntervals;
 
-    Task(){
-        setNombreTarea();
-        setIntervalos();
-
-        System.out.print("Tarea Introducida:\n");
-        System.out.print("Nombre Tarea: "+ nombreTarea + "\n");
-        System.out.print("Numero Intervalos: "+ Intervalos.size() + "\n");
+    public Task(String name, String description, Project father){
+        //super uses Activity constructor
+        super(name, description, father);
+        intervalList = new ArrayList<Interval>();
+        nIntervals = 0;
     }
 
-    //Setters
-    public void setNombreTarea(){
-        System.out.print("Ingrese el nombre de la tarea: \n");
-        Scanner capt = new Scanner(System.in);
-        nombreTarea = capt.nextLine();
+    public void init(Clock clock){
+        Interval interval = new Interval(this);
+        intervalList.add(interval);
+        nIntervals++;
     }
 
-    public void setIntervalos()
-    {
-        System.out.print("Ingrese el numero de intervalos que quiere introducir: \n");
-        Scanner capt = new Scanner(System.in);
-        int num = capt.nextInt();
 
-        Intervalos = new ArrayList<Interval>();
-
-        for (int cont = 0; cont < num; cont++){
-            Interval i = new Interval();
-            Intervalos.add(i);
-        }
-    }
 
 }

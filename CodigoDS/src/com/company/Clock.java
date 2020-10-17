@@ -15,4 +15,14 @@ public class Clock {
    //Deberia encargarse de actualizar el timer (cronometro) cuando un intervalo se encuentra activo
    //Deberia encargarse de los calculos de los tiempos empleados en proyectos, tareas e intervalos
     //Deberia encargarse de devolver los intervalos en fecha (fechaInicio y fechaFinal)
+
+  private LocalDateTime date;
+  private Timer timer;
+
+  public LocalDateTime getDate(){return date;}
+
+  public void initialize(){
+
+  }
+
 }
