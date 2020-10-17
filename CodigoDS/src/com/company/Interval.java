@@ -8,6 +8,7 @@ public class Interval {
     LocalDateTime fechaInicio;
     LocalDateTime fechaPausaProvisional;
     LocalDateTime fechaFinal;
+    int duracion;
 
      Interval(){//Contructor del Intervalo
        // fechaCreacion = LocalDateTime.now();
@@ -30,7 +31,7 @@ public class Interval {
         fechaFinal = LocalDateTime.now();
     }
 
-    //GetterS
+    //Getters
     //public LocalDateTime getFechaCreacion(){ return fechaCreacion;}
     public LocalDateTime getFechaInicio(){ return fechaInicio;}
     public LocalDateTime getFechaPausaProvisional(){ return fechaPausaProvisional;}
