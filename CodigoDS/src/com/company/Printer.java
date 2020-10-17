@@ -5,14 +5,26 @@ import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
 
 public class Printer implements PropertyChangeListener, Visitor {
+  private Project root;
+
+  public Printer(){root=null;}
+
+  public Printer(Project r){root=r;}
+
   public void print(){
-    System.out.println("");
+    System.out.println("                              initial date   final date   duration");
+    root.acceptVisitor(this);
   }
 
   public void printTimes(LocalDateTime initTime, LocalDateTime finalTime, int duration){
     if(initTime != null && finalTime != null){
-      System.out.println(initTime.toLocalDate() + "   " + finalTime.toLocalDate() + "   " + duration);
+      System.out.print(initTime.toLocalDate() + " " + initTime.toLocalTime() + "      " +
+          finalTime.toLocalDate() + " " + finalTime.toLocalTime() + "      " + duration);
     }
+    else {
+      System.out.print("");
+    }
+    System.out.println();
   }
 
   @Override
@@ -27,9 +39,21 @@ public class Printer implements PropertyChangeListener, Visitor {
   }
 
   @Override
-  public void visitActivity(Activity activity) {
-    System.out.print("interval:   " + activity.getName() + "    ");
-    printTimes(activity.getInitialDate(), activity.getFinalDate(), activity.getDuration());
+  public void visitTask(Task task) {
+    for(Interval interval: task.getIntervalList()){
+      interval.acceptVisitor(this);
+    }
+    System.out.print("activity:   " + task.getName() + "    ");
+    printTimes(task.getInitialDate(), task.getFinalDate(), task.getDuration());
+  }
+
+  @Override
+  public void visitProject(Project project) {
+    for(Activity activity:project.getActivityList()){
+      activity.acceptVisitor(this);
+    }
+    System.out.print("activity:   " + project.getName() + "    ");
+    printTimes(project.getInitialDate(), project.getFinalDate(), project.getDuration());
   }
 
 }

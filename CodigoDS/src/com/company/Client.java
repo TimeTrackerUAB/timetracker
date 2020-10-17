@@ -49,6 +49,7 @@ public class Client {
 
     public static void startTest(){
 
+
         Project root = new Project("root", "", null);
         Project P1 = new Project("software design", "", root);
         Project P2 = new Project("software testing", "", root);
@@ -62,15 +63,29 @@ public class Client {
         Task T4 = new Task("first milestone", "", P6);
 
 
-
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         // Main
 
-        Clock clock = Clock.getInstance();
         int period = 2000;
-        clock.initialize(period);
+        Clock.getInstance().initialize(period);
+
+        Project root = new Project("root", "", null);
+        Task transportation = new Task("transportation", "", root);
+        Task firsList = new Task("First List", "", root);
+        Task secondList = new Task("second list", "", root);
+
+        Printer printer = new Printer(root);
+        Clock.getInstance().addPropertyChangeListener(printer);
+
+        transportation.startTask();
+        Thread.sleep(2000);
+        firsList.startTask();
+        Thread.sleep(6000);
+        secondList.startTask();
+        Thread.sleep(4000);
+
 
         /*
         boolean menuActivo = true;

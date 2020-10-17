@@ -1,27 +1,31 @@
 package com.company;
+
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 public class Task extends Activity{
 
-    private ArrayList<Interval> intervalList;
-    private int nIntervals;
+    private List<Interval> intervalList;
 
     public Task(String name, String description, Project father){
         //super uses Activity constructor
         super(name, description, father);
+        father.addChild(this);
         intervalList = new ArrayList<Interval>();
-        nIntervals = 0;
     }
 
-    public void init(Clock clock){
+    //Getters
+    public List<Interval> getIntervalList(){return intervalList;}
+
+    public void startTask(){
         Interval interval = new Interval(this);
+        interval.startInterval();
         intervalList.add(interval);
-        nIntervals++;
     }
 
-
-
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitTask(this);
+    }
 }

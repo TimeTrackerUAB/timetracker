@@ -2,23 +2,27 @@ package com.company;
 
 import java.time.LocalDateTime;
 
-public class Activity {
+public abstract class Activity implements Visited{
   protected String name;
   protected String description;
+  protected Project father;
   protected LocalDateTime initialDate;
   protected LocalDateTime finalDate;
   protected int duration;
-  protected Project father;
+
+  public Activity(){
+    name = "";
+    description = "";
+    father = null;
+    initialDate = null;
+    finalDate = null;
+    duration = 0;
+  }
 
   public Activity(String activityName, String activityDescription, Project fatherProject){
     name = activityName;
     description = activityDescription;
-    duration = 0;
-
-    //See if father is root
-    if(father != null){
-      father.addChild(this);
-    }
+    father = fatherProject;
   }
 
   //Getters
@@ -37,10 +41,6 @@ public class Activity {
         father.setInitialDate(date);
       }
     }
-  }
-
-  public void printTree(){
-
   }
 
 }

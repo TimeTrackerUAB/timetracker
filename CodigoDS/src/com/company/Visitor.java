@@ -2,6 +2,7 @@ package com.company;
 
 public interface Visitor {
   void visitInterval(Interval interval);
-  void visitActivity(Activity activity);
+  void visitTask(Task task);
+  void visitProject(Project project);
 
 }

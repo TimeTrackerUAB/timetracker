@@ -19,46 +19,52 @@ public class Clock extends Thread{
    //Deberia encargarse de los calculos de los tiempos empleados en proyectos, tareas e intervalos
     //Deberia encargarse de devolver los intervalos en fecha (fechaInicio y fechaFinal)
 
-  private LocalDateTime date;
-  private Timer timer;
-  private PropertyChangeSupport support;
-  private static Clock clock;
+    private static volatile Clock clock;
+    private LocalDateTime date;
+    private Timer timer;
+    private PropertyChangeSupport support;
 
-
-  public static Clock getInstance(){
-    if(clock == null){
-      synchronized (Clock.class){
-        clock = new Clock();
-      };
+    Clock(){
+      date = LocalDateTime.now();
+      support = new PropertyChangeSupport(this);
     }
-    return clock;
-  }
 
-  public LocalDateTime getDate(){return date;}
-
-  public void initialize(int period){
-    timer = new Timer();
-    timer.scheduleAtFixedRate(new TimerTask() {
-      @Override
-      public void run() {
-        LocalDateTime time = LocalDateTime.now();
-        //setTime(time);
-        System.out.println("Time: " + time);
+    public static Clock getInstance(){
+      if(clock == null){
+        synchronized (Clock.class){
+          clock = new Clock();
+        };
       }
-    },0, period);
-  }
+      return clock;
+    }
 
-  public void setTime(LocalDateTime time){
-    support.firePropertyChange("new time", this.date, time);
-    this.date = time;
-  }
+    public LocalDateTime getDate(){return date;}
 
-  public void addPropertyChangeListener(PropertyChangeListener pcl) {
-    support.addPropertyChangeListener(pcl);
-  }
+    public void initialize(int period){
+      timer = new Timer();
+      timer.scheduleAtFixedRate(new TimerTask() {
+        @Override
+        public void run() {
+          LocalDateTime time = LocalDateTime.now();
+          setTime(time);
+          //System.out.println("Time: " + time); COMPROVAR QUE EL RELLOTGE FUNCIONA
+        }
+      },0, period);
+    }
 
-  public void removePropertyChangeListener(PropertyChangeListener pcl) {
-    support.removePropertyChangeListener(pcl);
-  }
+    public void setTime(LocalDateTime time){
+      support.firePropertyChange("new time", this.date, time);
+      this.date = time;
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+      support.addPropertyChangeListener(pcl);
+    }
+
+
+
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+      support.removePropertyChangeListener(pcl);
+    }
 
 }

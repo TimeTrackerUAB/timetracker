@@ -4,7 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
 
-public class Interval implements PropertyChangeListener {
+public class Interval implements PropertyChangeListener, Visited {
 
     private LocalDateTime initTime;
     private LocalDateTime finalTime;
@@ -26,14 +26,15 @@ public class Interval implements PropertyChangeListener {
     public LocalDateTime getFinalTime(){return finalTime;}
     public int getDuration() {return duration; }
 
-  public void setFinalTime(LocalDateTime time){
+    public void startInterval(){
+      Clock.getInstance().addPropertyChangeListener(this);
+      initTime = Clock.getInstance().getDate();
+    }
+
+    public void setFinalTime(LocalDateTime time){
        finalTime = time;
     }
 
-    public void startInterval(){
-       Clock.getInstance().addPropertyChangeListener(this);
-       initTime = Clock.getInstance().getDate();
-    }
 
     public int calculateDuration(){
        //duration = duration + finalTime
@@ -42,10 +43,14 @@ public class Interval implements PropertyChangeListener {
     }
 
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      this.setFinalTime((LocalDateTime) evt.getNewValue());
 
-  @Override
-  public void propertyChange(PropertyChangeEvent evt) {
-    this.setFinalTime((LocalDateTime) evt.getNewValue());
+    }
 
-  }
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+      visitor.visitInterval(this);
+    }
 }
