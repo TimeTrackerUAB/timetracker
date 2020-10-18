@@ -12,10 +12,10 @@ public class Client {
     static void printMenu(){
 
         System.out.print("###############TIMETRACKER###############\n");
-        System.out.print("# Caso 1 : Crear nueva Tarea            #\n");
-        System.out.print("# Caso 2 : Salir de timeTracker         #\n");
+        System.out.print("# Case 1 : Create new Task            #\n");
+        System.out.print("# Case 2 : Close TimeTracker         #\n");
         System.out.print("#########################################\n");
-        System.out.print("Ingrese el numero del caso que desea: \n");
+        System.out.print("Enter de number you want: \n");
     }
 
     static boolean menuCliente(){
@@ -47,27 +47,31 @@ public class Client {
         return menuActivo;
     }
 
-    public static void startTest(){
+    public static void startTestA() throws InterruptedException{
 
+        int period = 2000;
+        Clock.getInstance().initialize(period);
 
         Project root = new Project("root", "", null);
-        Project P1 = new Project("software design", "", root);
-        Project P2 = new Project("software testing", "", root);
-        Project P3 = new Project("databases", "", root);
-        Project P4 = new Project("task transportation", "", root);
-        Project P5 = new Project("problems", "", P1);
-        Project P6 = new Project("project time tracker", "", P1);
-        Task T1 = new Task("first list", "", P5);
-        Task T2 = new Task("second list", "", P5);
-        Task T3 = new Task("read handout", "", P6);
-        Task T4 = new Task("first milestone", "", P6);
+        Project software_design = new Project("software design", "", root);
+        Project software_testing = new Project("software testing", "", root);
+        Project databases = new Project("databases", "", root);
+        Task transportation = new Task("transportation", "", root);
+        Project problems = new Project("problems", "", software_design);
+        Project project_time_tracker = new Project("project time tracker", "", software_design);
+        Task first_list = new Task("first list", "", problems);
+        Task second_list = new Task("second list", "", problems);
+        Task read_handout = new Task("read handout", "", project_time_tracker);
+        Task first_milestone = new Task("first milestone", "", project_time_tracker);
+
+        Printer printer = new Printer(root);
+        Clock.getInstance().addPropertyChangeListener(printer);
+
 
 
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        // Main
-
+    public static void startTestB() throws InterruptedException {
         int period = 2000;
         Clock.getInstance().initialize(period);
 
@@ -79,12 +83,39 @@ public class Client {
         Printer printer = new Printer(root);
         Clock.getInstance().addPropertyChangeListener(printer);
 
+
         transportation.startTask();
         Thread.sleep(2000);
+        transportation.stopTask();
         firsList.startTask();
         Thread.sleep(6000);
+        firsList.stopTask();
         secondList.startTask();
         Thread.sleep(4000);
+        secondList.stopTask();
+        
+
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        // Main
+        Scanner sc = new Scanner(System.in);
+        String test = null;
+        System.out.println("Choose test:");
+        System.out.println("- Test A --> type 'A'");
+        System.out.println("- Test B --> type 'B'");
+        test = sc.nextLine();
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        sc.close();
+
+        if(test.equals("A")) {
+            startTestA();
+        }
+        else if(test.equals("B")) {
+            startTestB();
+        }
 
 
         /*

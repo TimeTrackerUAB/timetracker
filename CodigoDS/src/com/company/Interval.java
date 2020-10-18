@@ -11,7 +11,8 @@ public class Interval implements PropertyChangeListener, Visited {
     private int duration;
     private Task fatherTask;
 
-     Interval(Task task){
+    //Constructor
+    Interval(Task task){
        fatherTask = task;
        duration = 0;
        initTime = null;
@@ -26,13 +27,19 @@ public class Interval implements PropertyChangeListener, Visited {
     public LocalDateTime getFinalTime(){return finalTime;}
     public int getDuration() {return duration; }
 
+    //Setters
+    public void setFinalTime(LocalDateTime time){
+      finalTime = time;
+    }
+
+
     public void startInterval(){
       Clock.getInstance().addPropertyChangeListener(this);
       initTime = Clock.getInstance().getDate();
     }
 
-    public void setFinalTime(LocalDateTime time){
-       finalTime = time;
+    public void stopInterval(){
+      Clock.getInstance().removePropertyChangeListener(this);
     }
 
 
@@ -45,7 +52,18 @@ public class Interval implements PropertyChangeListener, Visited {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      this.setFinalTime((LocalDateTime) evt.getNewValue());
+
+
+      assert evt.getPropertyName().equals("new time");
+      Clock clock = (Clock) evt.getSource();
+      LocalDateTime date = clock.getDate();
+      int period = (int) clock.getPeriod();
+
+      this.setFinalTime(date);
+      duration += period;
+
+      //Update with new date and increment duration of all predecessors
+      fatherTask.update(finalTime, period);
 
     }
 

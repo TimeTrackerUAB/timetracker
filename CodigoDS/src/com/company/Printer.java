@@ -19,7 +19,7 @@ public class Printer implements PropertyChangeListener, Visitor {
   public void printTimes(LocalDateTime initTime, LocalDateTime finalTime, int duration){
     if(initTime != null && finalTime != null){
       System.out.print(initTime.toLocalDate() + " " + initTime.toLocalTime() + "      " +
-          finalTime.toLocalDate() + " " + finalTime.toLocalTime() + "      " + duration);
+          finalTime.toLocalDate() + " " + finalTime.toLocalTime() + "      " + duration/1000);
     }
     else {
       System.out.print("");
@@ -49,7 +49,7 @@ public class Printer implements PropertyChangeListener, Visitor {
 
   @Override
   public void visitProject(Project project) {
-    for(Activity activity:project.getActivityList()){
+    for(Activity activity: project.getActivityList()){
       activity.acceptVisitor(this);
     }
     System.out.print("activity:   " + project.getName() + "    ");

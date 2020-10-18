@@ -43,4 +43,14 @@ public abstract class Activity implements Visited{
     }
   }
 
+  public void update(LocalDateTime date, int time){
+    finalDate = date;
+    duration += time;
+
+    //If there is father project it makes a recursive call to update it
+    if(father != null){
+      father.update(date, time);
+    }
+  }
+
 }
