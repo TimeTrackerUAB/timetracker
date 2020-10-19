@@ -1,5 +1,6 @@
 package com.company;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -25,4 +26,18 @@ public class Project extends Activity{
   public void acceptVisitor(Visitor visitor) {
     visitor.visitProject(this);
   }
+
+  @Override
+  public void update(LocalDateTime finalTime) {
+    int dur=0;
+    for(Activity activity:activityList){
+      dur+=activity.getDuration();
+    }
+    duration=dur;
+    finalDate=finalTime;
+    if(father != null){
+      father.update(finalTime);
+    }
+  }
+
 }

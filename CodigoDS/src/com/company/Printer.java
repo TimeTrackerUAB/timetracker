@@ -3,26 +3,28 @@ package com.company;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Printer implements PropertyChangeListener, Visitor {
   private Project root;
+  private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd hh:mm:ss");
+  private LocalDateTime lastTime;
 
   public Printer(){root=null;}
 
   public Printer(Project r){root=r;}
 
   public void print(){
-    System.out.println("                              initial date   final date   duration");
-    root.acceptVisitor(this);
+    if(root.getDuration()!=0) {
+      System.out.println("                              initial date          final date            duration");
+      root.acceptVisitor(this);
+    }
   }
 
   public void printTimes(LocalDateTime initTime, LocalDateTime finalTime, int duration){
     if(initTime != null && finalTime != null){
-      System.out.print(initTime.toLocalDate() + " " + initTime.toLocalTime() + "      " +
-          finalTime.toLocalDate() + " " + finalTime.toLocalTime() + "      " + duration/1000);
-    }
-    else {
-      System.out.print("");
+      //System.out.print(initTime.format(formatter) + "   " + finalTime.format(formatter) + "   " + duration/1000);
+      System.out.print(initTime.format(formatter) + "   " + finalTime.format(formatter) + "   " + duration);
     }
     System.out.println();
   }
@@ -34,8 +36,10 @@ public class Printer implements PropertyChangeListener, Visitor {
 
   @Override
   public void visitInterval(Interval interval) {
-    System.out.print("interval:                     ");
-    printTimes(interval.getInitTime(), interval.getFinalTime(), interval.getDuration());
+    if(interval.getDuration()!=0) {
+      System.out.print("interval:                     ");
+      printTimes(interval.getInitTime(), interval.getFinalTime(), interval.getDuration());
+    }
   }
 
   @Override
@@ -43,8 +47,13 @@ public class Printer implements PropertyChangeListener, Visitor {
     for(Interval interval: task.getIntervalList()){
       interval.acceptVisitor(this);
     }
-    System.out.print("activity:   " + task.getName() + "    ");
-    printTimes(task.getInitialDate(), task.getFinalDate(), task.getDuration());
+    if(task.getDuration()!=0) {
+      System.out.print("activity:   " + task.getName());
+      for (int i = task.getName().length(); i < 18; i++) {
+        System.out.print(" ");
+      }
+      printTimes(task.getInitialDate(), task.getFinalDate(), task.getDuration());
+    }
   }
 
   @Override
@@ -52,8 +61,13 @@ public class Printer implements PropertyChangeListener, Visitor {
     for(Activity activity: project.getActivityList()){
       activity.acceptVisitor(this);
     }
-    System.out.print("activity:   " + project.getName() + "    ");
-    printTimes(project.getInitialDate(), project.getFinalDate(), project.getDuration());
+    if(project.getDuration()!=0) {
+      System.out.print("activity:   " + project.getName());
+      for (int i = project.getName().length(); i < 18; i++) {
+        System.out.print(" ");
+      }
+      printTimes(project.getInitialDate(), project.getFinalDate(), project.getDuration());
+    }
   }
 
 }

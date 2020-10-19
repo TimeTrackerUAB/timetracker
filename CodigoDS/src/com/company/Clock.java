@@ -45,12 +45,12 @@ public class Clock extends Thread{
       timer.scheduleAtFixedRate(new TimerTask() {
         //With RUN and TimerTask we are able to execute clock notifications to
         //all observers in parallel to the main program
-        @Override
-        public void run() {
-          LocalDateTime time = LocalDateTime.now();
-          setTime(time);
-          //System.out.println("Time: " + time); TEST IF CLOCK WORKS
-        }
+          @Override
+          public void run () {
+            LocalDateTime time = LocalDateTime.now();
+            setTime(time);
+            //System.out.println("Time: " + time); TEST IF CLOCK WORKS
+          }
       },0, period);
     }
 

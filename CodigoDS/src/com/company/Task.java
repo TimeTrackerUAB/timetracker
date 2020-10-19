@@ -1,5 +1,6 @@
 package com.company;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -29,11 +30,26 @@ public class Task extends Activity{
     }
 
     public void stopTask(){
-        Clock.getInstance().removePropertyChangeListener(intervalList.get(nIntervals-1));
+        for(Interval interval:intervalList){
+            interval.stopInterval();
+        }
     }
 
     @Override
     public void acceptVisitor(Visitor visitor) {
         visitor.visitTask(this);
+    }
+
+    @Override
+    public void update(LocalDateTime finalTime) {
+        int dur=0;
+        for(Interval interval:intervalList){
+            dur+=interval.getDuration();
+        }
+        duration=dur;
+        finalDate=finalTime;
+        if(father != null){
+            father.update(finalTime);
+        }
     }
 }

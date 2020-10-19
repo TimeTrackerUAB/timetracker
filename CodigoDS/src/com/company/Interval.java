@@ -3,6 +3,7 @@ package com.company;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
 
 public class Interval implements PropertyChangeListener, Visited {
 
@@ -36,6 +37,7 @@ public class Interval implements PropertyChangeListener, Visited {
     public void startInterval(){
       Clock.getInstance().addPropertyChangeListener(this);
       initTime = Clock.getInstance().getDate();
+      fatherTask.setInitialDate(initTime);
     }
 
     public void stopInterval(){
@@ -44,26 +46,34 @@ public class Interval implements PropertyChangeListener, Visited {
 
 
     public int calculateDuration(){
-       //duration = duration + finalTime
-
-      return duration;
+      int sum=0;
+      if(finalTime.getHour()!=initTime.getHour()){
+        sum+=(finalTime.getHour()-finalTime.getHour())*3600;
+      }
+      if(finalTime.getMinute()!=initTime.getMinute()){ //COMPROBAR MINUTOS
+        sum+=(finalTime.getMinute()-finalTime.getMinute())*60;
+      }
+      if(finalTime.getSecond()!=initTime.getSecond()){ //COMPORBAR SEGUNDOS
+        sum+=(finalTime.getSecond()-initTime.getSecond());
+      }
+      return sum;
     }
 
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
-
-      assert evt.getPropertyName().equals("new time");
+      /*assert evt.getPropertyName().equals("new time");
       Clock clock = (Clock) evt.getSource();
       LocalDateTime date = clock.getDate();
       int period = (int) clock.getPeriod();
 
       this.setFinalTime(date);
-      duration += period;
-
+      duration += period;*/
+      this.setFinalTime((LocalDateTime)evt.getNewValue());
+      int period = Clock.getInstance().getPeriod();
+      duration += period/1000;
       //Update with new date and increment duration of all predecessors
-      fatherTask.update(finalTime, period);
+      fatherTask.update(finalTime);
 
     }
 
