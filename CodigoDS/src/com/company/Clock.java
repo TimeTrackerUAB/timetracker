@@ -42,16 +42,17 @@ public class Clock extends Thread{
     public void initialize(int period){
       this.period = period;
       timer = new Timer();
-      timer.scheduleAtFixedRate(new TimerTask() {
-        //With RUN and TimerTask we are able to execute clock notifications to
-        //all observers in parallel to the main program
-          @Override
-          public void run () {
-            LocalDateTime time = LocalDateTime.now();
-            setTime(time);
-            //System.out.println("Time: " + time); TEST IF CLOCK WORKS
-          }
-      },0, period);
+      timer.scheduleAtFixedRate(
+          new TimerTask() {
+          //With RUN and TimerTask we are able to execute clock notifications to
+          //all observers in parallel to the main program
+            @Override
+            public void run () {
+              //LocalDateTime time = LocalDateTime.now();
+              setTime(LocalDateTime.now());
+              //System.out.println("Time: " + LocalDateTime.now());
+            }
+          },0, period);
     }
 
 

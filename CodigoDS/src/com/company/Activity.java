@@ -35,11 +35,11 @@ public abstract class Activity implements Visited{
 
   //Setters
   public void setInitialDate(LocalDateTime date){
-    initialDate = date;
-    if(father != null){
-      if (father.getInitialDate() == null){
-        father.setInitialDate(date);
-      }
+    if (initialDate == null){
+      initialDate = date;
+      if(father != null){
+          father.setInitialDate(date);
+        }
     }
   }
 

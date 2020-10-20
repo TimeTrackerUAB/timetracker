@@ -26,7 +26,6 @@ public class Task extends Activity{
         interval.startInterval();
         intervalList.add(interval);
         nIntervals++;
-
     }
 
     public void stopTask(){

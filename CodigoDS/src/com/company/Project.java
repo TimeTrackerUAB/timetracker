@@ -8,10 +8,15 @@ public class Project extends Activity{
 
   private List<Activity> activityList;
 
+  public Project(){super();}
+
   public Project(String name, String description, Project father) {
     //super uses Activity constructor
     super(name, description, father);
     activityList = new ArrayList<Activity>();
+    if(father!=null) {
+      father.addChild(this);
+    }
   }
 
   //Getters
