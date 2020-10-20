@@ -1,10 +1,18 @@
 package com.company;
-import java.io.*;
-import java.security.PKCS12Attribute;
-import java.util.*;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 public class Client {
+
+    private static Project projectRoot;
+
     Client(){
 
     }
@@ -72,10 +80,7 @@ public class Client {
         Task read_handout = new Task("read handout", "", project_time_tracker);
         Task first_milestone = new Task("first milestone", "", project_time_tracker);
 
-        Printer printer = new Printer(root);
-        Clock.getInstance().addPropertyChangeListener(printer);
-
-
+        projectRoot=root;
 
     }
 
@@ -136,67 +141,33 @@ public class Client {
         Clock.getInstance().removePropertyChangeListener(printer);
     }
 
-    public static void startTestC() throws InterruptedException {
-        int period = 2000;
-        Clock.getInstance().initialize(period);
+    public static void writeJSONFile() throws IOException{
+        JSONObject root = new JSONObject();
+        root.put("name", projectRoot.getName());
+        root.put("duration",projectRoot.getDuration());
+        root.put("finalDate",projectRoot.getFinalDate());
+        root.put("initialDate",projectRoot.getInitialDate());
+        root.put("father", projectRoot.getFather());
+        root.put("description",projectRoot.getDescription());
+        JSONArray array = new JSONArray();
+        for(Activity a : projectRoot.getActivityList()){
+            JSONObject obj = a.convertToJSONObject();
+            array.put(obj);
+        }
+        root.put("childs", array);
+        try {
+            FileWriter myWriter = new FileWriter("root.json");
+            myWriter.write(String.valueOf(root));
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
 
-        Project root = new Project("root", "", null);
-        Project P0 = new Project("P0","",root);
-        Task T0 = new Task("T0","",P0);
-        Task T1 = new Task("T1","",P0);
-        Task T2 = new Task("T2","",P0);
-        Project P1 = new Project("P1","",root);
-        Task T3 = new Task("T3","",P1);
-        Task T4 = new Task("T4","",root);
-        Task T5 = new Task("T5","",root);
-        Project P3 = new Project("P3","",root);
+    public void readJSONFile() throws IOException{
 
-        Printer printer = new Printer(root);
-        Clock.getInstance().addPropertyChangeListener(printer);
-
-        T0.startTask();
-        Thread.sleep(10000);
-        T4.startTask();
-        Thread.sleep(10000);
-        T0.stopTask();
-        T4.stopTask();
-        T1.startTask();
-        T2.startTask();
-        Thread.sleep(10000);
-        T0.startTask();
-        T5.startTask();
-        Thread.sleep(10000);
-        T0.stopTask();
-        T1.stopTask();
-        T4.startTask();
-        Thread.sleep(20000);
-        T1.startTask();
-        T5.stopTask();
-        Thread.sleep(10000);
-        T5.startTask();
-        Thread.sleep(10000);
-        T2.stopTask();
-        T5.stopTask();
-        Thread.sleep(10000);
-        T5.startTask();
-        Thread.sleep(10000);
-        T2.startTask();
-        T5.stopTask();
-        Thread.sleep(20000);
-        T1.stopTask();
-        T2.stopTask();
-        T3.startTask();
-        T4.stopTask();
-        Thread.sleep(10000);
-        T0.startTask();
-        T3.stopTask();
-        T4.startTask();
-        Thread.sleep(10000);
-        T0.stopTask();
-        Thread.sleep(10000);
-        T4.stopTask();
-
-        Clock.getInstance().removePropertyChangeListener(printer);
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -206,7 +177,6 @@ public class Client {
         System.out.println("Choose test:");
         System.out.println("- Test A --> type 'A'");
         System.out.println("- Test B --> type 'B'");
-        System.out.println("- Test C --> type 'C'");
         test = sc.nextLine();
         System.out.println("");
         System.out.println("");
@@ -215,24 +185,16 @@ public class Client {
 
         if(test.equals("A")) {
             startTestA();
+            try {
+                writeJSONFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else if(test.equals("B")) {
             startTestB();
         }
-        else if(test.equals("C")) {
-            startTestC();
-        }
-
-
-        /*
-        boolean menuActivo = true;
-
-        do {
-            menuActivo = menuCliente();
-
-        } while (menuActivo != false);
-           */
-        //System.exit(0);
+        System.exit(0);
     }
 
 

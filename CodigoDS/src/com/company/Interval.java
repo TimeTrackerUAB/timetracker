@@ -3,7 +3,6 @@ package com.company;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalAmount;
 
 public class Interval implements PropertyChangeListener, Visited {
 

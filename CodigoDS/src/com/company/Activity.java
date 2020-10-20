@@ -1,5 +1,8 @@
 package com.company;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.time.LocalDateTime;
 
 public abstract class Activity implements Visited{
@@ -41,6 +44,25 @@ public abstract class Activity implements Visited{
           father.setInitialDate(date);
         }
     }
+  }
+
+  public JSONObject convertToJSONObject(){
+    JSONObject act = new JSONObject();
+    act.put("duration",duration);
+    act.put("finalDate",finalDate);
+    act.put("initialDate",initialDate);
+    act.put("father", father.getName());
+    act.put("description",description);
+    act.put("name", name);
+    JSONArray array = new JSONArray();
+    if(this instanceof Project){
+      for(Activity a: ((Project) this).getActivityList()){
+        JSONObject obj = a.convertToJSONObject();
+        array.put(obj);
+      }
+    }
+    act.put("childs", array);
+    return act;
   }
 
   public abstract void update(LocalDateTime finalTime);
