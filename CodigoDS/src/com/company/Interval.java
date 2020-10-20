@@ -18,9 +18,6 @@ public class Interval implements PropertyChangeListener, Visited {
        duration = 0;
        initTime = null;
        finalTime = null;
-       if(fatherTask.getInitialDate() == null){
-           fatherTask.setInitialDate(initTime);
-       }
     }
 
     //Getters
@@ -44,22 +41,6 @@ public class Interval implements PropertyChangeListener, Visited {
       Clock.getInstance().removePropertyChangeListener(this);
     }
 
-
-    public int calculateDuration(){
-      int sum=0;
-      if(finalTime.getHour()!=initTime.getHour()){
-        sum+=(finalTime.getHour()-finalTime.getHour())*3600;
-      }
-      if(finalTime.getMinute()!=initTime.getMinute()){ //COMPROBAR MINUTOS
-        sum+=(finalTime.getMinute()-finalTime.getMinute())*60;
-      }
-      if(finalTime.getSecond()!=initTime.getSecond()){ //COMPORBAR SEGUNDOS
-        sum+=(finalTime.getSecond()-initTime.getSecond());
-      }
-      return sum;
-    }
-
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       /*assert evt.getPropertyName().equals("new time");
@@ -69,7 +50,7 @@ public class Interval implements PropertyChangeListener, Visited {
 
       this.setFinalTime(date);
       duration += period;*/
-      this.setFinalTime((LocalDateTime)evt.getNewValue());
+      finalTime=((LocalDateTime)evt.getNewValue());
       int period = Clock.getInstance().getPeriod();
       duration += period/1000;
       //Update with new date and increment duration of all predecessors
