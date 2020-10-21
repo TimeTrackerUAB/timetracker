@@ -37,10 +37,12 @@ public class Interval implements PropertyChangeListener, Visited {
       Clock.getInstance().addPropertyChangeListener(this);
       initTime = Clock.getInstance().getDate();
       fatherTask.setInitialDate(initTime);
+      //System.out.println(fatherTask.getName() + " starts");
     }
 
     public void stopInterval(){
       Clock.getInstance().removePropertyChangeListener(this);
+      //System.out.println(fatherTask.getName() + " stops");
     }
 
     @Override

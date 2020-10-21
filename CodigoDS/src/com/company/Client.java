@@ -112,7 +112,7 @@ public class Client {
         Clock.getInstance().addPropertyChangeListener(printer);
 
         System.out.println("                              initial date          final date            duration");
-        System.out.println("Start Test");
+        System.out.println("start test");
         //1. start task transportation, wait 4 seconds and then stop it
         transportation.startTask();
         Thread.sleep(4000);
@@ -139,6 +139,8 @@ public class Client {
         Thread.sleep(2000);
 
         Clock.getInstance().removePropertyChangeListener(printer);
+
+        System.out.println("end of test");
     }
 
     public static void writeJSONFile() throws IOException{
