@@ -1,41 +1,54 @@
 package com.company;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 public class Task extends Activity{
 
-    List<Interval> Intervalos;
+    private List<Interval> intervalList;
+    private int nIntervals;
 
-    Task(){
-        setNombreTarea();
-        setIntervalos();
-
-        System.out.print("Tarea Introducida:\n");
-        System.out.print("Nombre Tarea: "+ nombreTarea + "\n");
-        System.out.print("Numero Intervalos: "+ Intervalos.size() + "\n");
+    public Task(String name, String description, Project father){
+        //super uses Activity constructor
+        super(name, description, father);
+        father.addChild(this);
+        intervalList = new ArrayList<Interval>();
+        nIntervals = 0;
     }
 
-    //Setters
-    public void setNombreTarea(){
-        System.out.print("Ingrese el nombre de la tarea: \n");
-        Scanner capt = new Scanner(System.in);
-        nombreTarea = capt.nextLine();
+    //Getters
+    public List<Interval> getIntervalList(){return intervalList;}
+
+    public void startTask(){
+        Interval interval = new Interval(this);
+        interval.startInterval();
+        intervalList.add(interval);
+        nIntervals++;
     }
 
-    public void setIntervalos()
-    {
-        System.out.print("Ingrese el numero de intervalos que quiere introducir: \n");
-        Scanner capt = new Scanner(System.in);
-        int num = capt.nextInt();
-
-        Intervalos = new ArrayList<Interval>();
-
-        for (int cont = 0; cont < num; cont++){
-            Interval i = new Interval();
-            Intervalos.add(i);
+    public void stopTask(){
+        for(Interval interval:intervalList){
+            interval.stopInterval();
         }
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitTask(this);
+    }
+
+    @Override
+    public void update(LocalDateTime finalTime) {
+        int dur=0;
+        for(Interval interval:intervalList){
+            dur+=interval.getDuration();
+        }
+        duration=dur;
+        finalDate=finalTime;
+        if(father != null){
+            father.update(finalTime);
+        }
+    }
 }

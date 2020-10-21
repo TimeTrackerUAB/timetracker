@@ -1,45 +1,48 @@
 package com.company;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
 public class Project extends Activity{
 
-    //Tendran ambas listas la misma longitud, ya que una contiene los objetos y la otra los nombres
-    private List<Activity>  ListActivity; //Lista de listas, donde el primer nodo es un proyecto y lo siguiente son tareas
+  private List<Activity> activityList;
 
+  public Project(){super();}
 
-    Project(){
-        ListActivity = new ArrayList<Activity>();
+  public Project(String name, String description, Project father) {
+    //super uses Activity constructor
+    super(name, description, father);
+    activityList = new ArrayList<Activity>();
+    if(father!=null) {
+      father.addChild(this);
     }
+  }
 
-    public Project(String name, Project father){
-        name= name
+  //Getters
+  public List<Activity> getActivityList(){return activityList;}
+
+  public void addChild(Activity activity) {
+    //Insert activity to child's list
+    activityList.add(activity);
+  }
+
+  @Override
+  public void acceptVisitor(Visitor visitor) {
+    visitor.visitProject(this);
+  }
+
+  @Override
+  public void update(LocalDateTime finalTime) {
+    int dur=0;
+    for(Activity activity:activityList){
+      dur+=activity.getDuration();
     }
-
-    //Setters
-    /*public void setProyectoTarea(List <String> n){
-
-        //Llamara a el setNombreTareas y setIntervalos de la clase Interval por cada uno de ellos
-        for (int cont = 0; cont < n.size() ; cont++)
-        {
-            Task t = new Task();
-            t.setNombreTarea();
-            t.setIntervalos();
-            t.nombreTarea= n.get(cont);
-            ProjTareas.add(t.Intervalos);
-        }
-    }*/
-
-    //Getters
-
-    public void addActivity(Activity activity){ //Funcion para añadir actividades a la lista
-        ListActivity.add(activity);
+    duration=dur;
+    finalDate=finalTime;
+    if(father != null){
+      father.update(finalTime);
     }
-
-    public void deleteActivity(Activity activity){ //Funcion para eliminar actividades de la lista
-        ListActivity.remove(activity);
-    }
-
+  }
 
 }

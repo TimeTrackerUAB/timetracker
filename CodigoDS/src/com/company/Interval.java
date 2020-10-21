@@ -1,42 +1,79 @@
 package com.company;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
 
-public class Interval {
+public class Interval implements PropertyChangeListener, Visited {
 
-    //LocalDateTime fechaCreacion;
-    LocalDateTime fechaInicio;
-    LocalDateTime fechaPausaProvisional;
-    LocalDateTime fechaFinal;
-    int duracion;
+    private LocalDateTime initTime;
+    private LocalDateTime finalTime;
+    private int duration;
+    private Task fatherTask;
 
-     Interval(){//Contructor del Intervalo
-       // fechaCreacion = LocalDateTime.now();
-    }
-
-    //Setters
-    public void actualizarFecha(){
-        fechaPausaProvisional = LocalDateTime.now();
-    }
-
-    //public void creacionInicial(){ fechaCreacion = LocalDateTime.now(); }
-
-    public void iniciar(){
-        fechaInicio = LocalDateTime.now();
-    }
-
-    public void pausar(){ fechaPausaProvisional = LocalDateTime.now(); }
-
-    public void finalizar(){
-        fechaFinal = LocalDateTime.now();
+    //Constructor
+    Interval(Task task){
+       fatherTask = task;
+       duration = 0;
+       initTime = null;
+       finalTime = null;
     }
 
     //Getters
-    //public LocalDateTime getFechaCreacion(){ return fechaCreacion;}
-    public LocalDateTime getFechaInicio(){ return fechaInicio;}
-    public LocalDateTime getFechaPausaProvisional(){ return fechaPausaProvisional;}
-    public LocalDateTime getFechaFinal(){ return fechaFinal;}
+    public LocalDateTime getInitTime(){return initTime;}
+    public LocalDateTime getFinalTime(){return finalTime;}
+    public int getDuration() {return duration; }
 
-    //Displays
-    //public void displayFechaCreacion(){ System.out.print(getFechaCreacion()+"\n");}
+    //Setters
+    public void setFinalTime(LocalDateTime time){
+      finalTime = time;
+    }
+
+
+    public void startInterval(){
+      Clock.getInstance().addPropertyChangeListener(this);
+      initTime = Clock.getInstance().getDate();
+      fatherTask.setInitialDate(initTime);
+      //System.out.println(fatherTask.getName() + " starts");
+    }
+
+    public void stopInterval(){
+      Clock.getInstance().removePropertyChangeListener(this);
+      //System.out.println(fatherTask.getName() + " stops");
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      /*assert evt.getPropertyName().equals("new time");
+      Clock clock = (Clock) evt.getSource();
+      LocalDateTime date = clock.getDate();
+      int period = (int) clock.getPeriod();
+
+      this.setFinalTime(date);
+      duration += period;*/
+      finalTime=((LocalDateTime)evt.getNewValue());
+      int period = Clock.getInstance().getPeriod();
+      duration += period/1000;
+      //Update with new date and increment duration of all predecessors
+      fatherTask.update(finalTime);
+
+    }
+
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+      visitor.visitInterval(this);
+    }
+
+  public JSONObject convertToJSONObject(){
+    JSONObject act = new JSONObject();
+    act.put("duration",duration);
+    act.put("finalDate",finalTime);
+    act.put("initialDate",initTime);
+    act.put("father", fatherTask.getName());
+    return act;
+  }
+
 }
