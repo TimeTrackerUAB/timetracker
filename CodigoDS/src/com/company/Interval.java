@@ -1,5 +1,8 @@
 package com.company;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
@@ -61,4 +64,14 @@ public class Interval implements PropertyChangeListener, Visited {
     public void acceptVisitor(Visitor visitor) {
       visitor.visitInterval(this);
     }
+
+  public JSONObject convertToJSONObject(){
+    JSONObject act = new JSONObject();
+    act.put("duration",duration);
+    act.put("finalDate",finalTime);
+    act.put("initialDate",initTime);
+    act.put("father", fatherTask.getName());
+    return act;
+  }
+
 }

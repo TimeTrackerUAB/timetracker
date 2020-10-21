@@ -61,6 +61,12 @@ public abstract class Activity implements Visited{
         array.put(obj);
       }
     }
+    if(this instanceof Task){
+      for(Interval i: ((Task) this).getIntervalList()){
+        JSONObject obj = i.convertToJSONObject();
+        array.put(obj);
+      }
+    }
     act.put("childs", array);
     return act;
   }

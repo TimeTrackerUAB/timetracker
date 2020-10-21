@@ -175,8 +175,9 @@ public class Client {
         Scanner sc = new Scanner(System.in);
         String test = null;
         System.out.println("Choose test:");
-        System.out.println("- Test A --> type 'A'");
-        System.out.println("- Test B --> type 'B'");
+        System.out.println("- Test A : Create Tree --> type 'A'");
+        System.out.println("- Test B : Create and Execute Tree --> type 'B'");
+        System.out.println("- Test C : Create JSON file from Test A --> type 'C'");
         test = sc.nextLine();
         System.out.println("");
         System.out.println("");
@@ -185,14 +186,17 @@ public class Client {
 
         if(test.equals("A")) {
             startTestA();
+        }
+        else if(test.equals("B")) {
+            startTestB();
+        }
+        else if(test.equals("C")){
+            startTestA();
             try {
                 writeJSONFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else if(test.equals("B")) {
-            startTestB();
         }
         System.exit(0);
     }
