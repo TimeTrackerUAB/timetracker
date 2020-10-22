@@ -1,4 +1,101 @@
 @startuml
 
 
+abstract class Activity{
+- name: String
+- description: String
+- initialDate: LocalDateTime
+- finalDate: LocalDateTime
+- duration: int
+- father: Project
++ Activity(String name, String description, Project father)
++ String getName()
++ String getDescription()
++ int getDuration()
++ Project getParent()
++ LocalDateTime getInitialDate()
++ LocalDateTime getFinalDate()
++ setInitialDate(LocalDateTime date)
++ JSONObject convertToJSONObject()
++ update()
+
+}
+
+class Task{
+- intervalList: List<Interval>
+- nIntervals: int
++ Task()
++ List<Interval> getIntervalList()
++ initTask()
++ stopTask()
++ acceptVisitor()
++ update()
+}
+
+class Project{
+- activityList: List<Activity>
++ Project()
++ addActivity()
++ deleteActivity()
+}
+
+class Clock{
+- clock: Clock
+- date: LocalDateTime
+- timer: Timer
+- support: PropertyChangeSupport
+- period: int
++ Clock()
++ Clock getInstance()
++ LocalDateTime getDate()
++ int getPeriod()
++ setTime(LocalDateTime time)
++ initialize()
++ addPropertyChangeListener(PropertyChangeListener pcl)
++ removePropertyChangeListener(PropertyChangeListener pcl)
+}
+
+class Interval{
+- initTime: LocalDateTime
+- finalTime: LocalDateTime
+- duration: int
+- fatherTask: Task
++ Interval(Task task)
++ LocalDateTime getInitTime()
++ LocalDateTime getFinalTime()
++ int getDuration()
++ setFinalTime(LocalDateTime time)
++ startInterval()
++ stopInterval()
++ propertyChange(PropertyChangeEvent evt)
++ acceptVisitor()
++ JSONObject convertToJSONObject()
+}
+
+class Client{
++ main()
++ printMenu()
++ clientMenu()
++ startTestA()
++ startTestB()
++ writeJSONFile()
++ readJSONFile()
+}
+
+class Printer{
+}
+
+class Visited{
+}
+
+class Visitor{
+}
+
+
+Project -up-|> Activity
+Task -up-|> Activity
+Project  *--> Activity
+Client --> Activity
+Task *-left- Interval
+
 @enduml
