@@ -37,6 +37,8 @@ class Project{
 + Project()
 + addActivity()
 + deleteActivity()
++ acceptVisitor(Visitor visitor)
+
 }
 
 class Clock{
@@ -54,6 +56,8 @@ class Clock{
 + addPropertyChangeListener(PropertyChangeListener pcl)
 + removePropertyChangeListener(PropertyChangeListener pcl)
 }
+
+class Thread{}
 
 class Interval{
 - initTime: LocalDateTime
@@ -83,19 +87,46 @@ class Client{
 }
 
 class Printer{
+- Project: root
+- DateTimeFormatter: formatter
++ printer()
++ Printer(Project r)
++ printTimes(LocalDateTime initTime, LocalDateTime finalTime, int duration)
++ visitInterval(interval interval)
++ visitTask(task task)
++ visitProject(Project project)
 }
 
-class Visited{
+interface Visited{
++ abstract acceptVisitor(Visitor visitor)
 }
 
-class Visitor{
+interface Visitor{
++ abstract visitInterval(Interval interval)
++ abstract visitTask(Task task)
++ abstract visitProject(Project project)
+
+}
+
+class PropertyChangeListener{
++ abstract propertyChange(PropertyChangeEvent evt)
 }
 
 
 Project -up-|> Activity
 Task -up-|> Activity
-Project  *--> Activity
-Client --> Activity
-Task *-left- Interval
+Project  *--> "*" Activity
+Client --> Project
+Client --> Task
+Client --> Clock
+Client --> Printer
+Task "1" -right->"*" Interval
+Printer --> Clock : observes
+Clock -right-|> Thread
+Printer ..|> Visitor
+Activity ..|> Visited
+Interval ..|> Visited
+Printer ..|> PropertyChangeListener
+Interval ..|> PropertyChangeListener
 
 @enduml
