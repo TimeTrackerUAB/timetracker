@@ -1,4 +1,132 @@
 @startuml
 
 
+abstract class Activity{
+- name: String
+- description: String
+- initialDate: LocalDateTime
+- finalDate: LocalDateTime
+- duration: int
+- father: Project
++ Activity(String name, String description, Project father)
++ String getName()
++ String getDescription()
++ int getDuration()
++ Project getParent()
++ LocalDateTime getInitialDate()
++ LocalDateTime getFinalDate()
++ setInitialDate(LocalDateTime date)
++ JSONObject convertToJSONObject()
++ update()
+
+}
+
+class Task{
+- intervalList: List<Interval>
+- nIntervals: int
++ Task()
++ List<Interval> getIntervalList()
++ initTask()
++ stopTask()
++ acceptVisitor()
++ update()
+}
+
+class Project{
+- activityList: List<Activity>
++ Project()
++ addActivity()
++ deleteActivity()
++ acceptVisitor(Visitor visitor)
+
+}
+
+class Clock{
+- clock: Clock
+- date: LocalDateTime
+- timer: Timer
+- support: PropertyChangeSupport
+- period: int
++ Clock()
++ Clock getInstance()
++ LocalDateTime getDate()
++ int getPeriod()
++ setTime(LocalDateTime time)
++ initialize()
++ addPropertyChangeListener(PropertyChangeListener pcl)
++ removePropertyChangeListener(PropertyChangeListener pcl)
+}
+
+class Thread{}
+
+class Interval{
+- initTime: LocalDateTime
+- finalTime: LocalDateTime
+- duration: int
+- fatherTask: Task
++ Interval(Task task)
++ LocalDateTime getInitTime()
++ LocalDateTime getFinalTime()
++ int getDuration()
++ setFinalTime(LocalDateTime time)
++ startInterval()
++ stopInterval()
++ propertyChange(PropertyChangeEvent evt)
++ acceptVisitor()
++ JSONObject convertToJSONObject()
+}
+
+class Client{
++ main()
++ printMenu()
++ clientMenu()
++ startTestA()
++ startTestB()
++ writeJSONFile()
++ readJSONFile()
+}
+
+class Printer{
+- Project: root
+- DateTimeFormatter: formatter
++ printer()
++ Printer(Project r)
++ printTimes(LocalDateTime initTime, LocalDateTime finalTime, int duration)
++ visitInterval(interval interval)
++ visitTask(task task)
++ visitProject(Project project)
+}
+
+interface Visited{
++ abstract acceptVisitor(Visitor visitor)
+}
+
+interface Visitor{
++ abstract visitInterval(Interval interval)
++ abstract visitTask(Task task)
++ abstract visitProject(Project project)
+
+}
+
+class PropertyChangeListener{
++ abstract propertyChange(PropertyChangeEvent evt)
+}
+
+
+Project -up-|> Activity
+Task -up-|> Activity
+Project  *--> "*" Activity
+Client --> Project
+Client --> Task
+Client --> Clock
+Client --> Printer
+Task "1" -right->"*" Interval
+Printer --> Clock : observes
+Clock -right-|> Thread
+Printer ..|> Visitor
+Activity ..|> Visited
+Interval ..|> Visited
+Printer ..|> PropertyChangeListener
+Interval ..|> PropertyChangeListener
+
 @enduml

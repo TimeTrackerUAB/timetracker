@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Interval implements PropertyChangeListener, Visited {
 
@@ -20,6 +21,12 @@ public class Interval implements PropertyChangeListener, Visited {
        duration = 0;
        initTime = null;
        finalTime = null;
+    }
+    Interval(Task father, LocalDateTime iTime, LocalDateTime fTime, int dur){
+      fatherTask = father;
+      duration = dur;
+      initTime = iTime;
+      finalTime = fTime;
     }
 
     //Getters
@@ -73,6 +80,7 @@ public class Interval implements PropertyChangeListener, Visited {
     act.put("finalDate",finalTime);
     act.put("initialDate",initTime);
     act.put("father", fatherTask.getName());
+    act.put("class", "interval");
     return act;
   }
 

@@ -1,8 +1,8 @@
 package com.company;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import org.json.JSONArray;
@@ -15,44 +15,6 @@ public class Client {
 
     Client(){
 
-    }
-
-    static void printMenu(){
-
-        System.out.print("###############TIMETRACKER###############\n");
-        System.out.print("# Case 1 : Create new Task            #\n");
-        System.out.print("# Case 2 : Close TimeTracker         #\n");
-        System.out.print("#########################################\n");
-        System.out.print("Enter de number you want: \n");
-    }
-
-    static boolean menuCliente(){
-
-        boolean menuActivo = true;
-
-        //Print del menu para el cliente
-        printMenu();
-
-        //Captura de la opción de entrada
-        Scanner capt = new Scanner(System.in);
-        int caso = capt.nextInt();
-
-
-        //Seleccion de la opción
-        switch(caso) {
-            case 1:
-                //Crear nueva Tarea
-                //Task t = new Task();
-                break;
-            case 2:
-                // Salir del TimeTracker
-                menuActivo = false;
-                break;
-            default:
-                // Opcion no valida, introduzca otra
-        }
-
-        return menuActivo;
     }
 
     public static void startTestA(){
@@ -80,7 +42,8 @@ public class Client {
         Task read_handout = new Task("read handout", "", project_time_tracker);
         Task first_milestone = new Task("first milestone", "", project_time_tracker);
 
-        projectRoot=root;
+        Printer printer = new Printer(root, false);
+        printer.print();
 
     }
 
@@ -108,7 +71,7 @@ public class Client {
         Task read_handout = new Task("read handout", "", project_time_tracker);
         Task first_milestone = new Task("first milestone", "", project_time_tracker);
 
-        Printer printer = new Printer(root);
+        Printer printer = new Printer(root, true);
         Clock.getInstance().addPropertyChangeListener(printer);
 
         System.out.println("                              initial date          final date            duration");
@@ -141,6 +104,8 @@ public class Client {
         Clock.getInstance().removePropertyChangeListener(printer);
 
         System.out.println("end of test");
+
+        projectRoot=root;
     }
 
     public static void writeJSONFile() throws IOException{
@@ -149,8 +114,9 @@ public class Client {
         root.put("duration",projectRoot.getDuration());
         root.put("finalDate",projectRoot.getFinalDate());
         root.put("initialDate",projectRoot.getInitialDate());
-        root.put("father", projectRoot.getFather());
+        root.put("father", "null");
         root.put("description",projectRoot.getDescription());
+        root.put("class", "project");
         JSONArray array = new JSONArray();
         for(Activity a : projectRoot.getActivityList()){
             JSONObject obj = a.convertToJSONObject();
@@ -168,39 +134,56 @@ public class Client {
         }
     }
 
-    public void readJSONFile() throws IOException{
+    public static void readJSONFile() throws IOException{
+        String resourceName = "root.json";
+        BufferedReader br = new BufferedReader(new FileReader(resourceName));
 
+        JSONTokener tokener = new JSONTokener(br);
+        JSONObject object = new JSONObject(tokener);
+        Project root = new Project(object.getString("name"),"",null);
+        root.setInitialDate(LocalDateTime.parse(object.getString("initialDate")));
+        root.setFinalDate(LocalDateTime.parse(object.getString("finalDate")));
+        root.setDuration(object.getInt("duration"));
+        root.createTree(root, object);
+
+        Printer printer = new Printer(root, false);
+        printer.print();
     }
 
     public static void main(String[] args) throws InterruptedException {
         // Main
         Scanner sc = new Scanner(System.in);
         String test = null;
-        System.out.println("Choose test:");
-        System.out.println("- Test A : Create Tree --> type 'A'");
-        System.out.println("- Test B : Create and Execute Tree --> type 'B'");
-        System.out.println("- Test C : Create JSON file from Test A --> type 'C'");
-        test = sc.nextLine();
-        System.out.println("");
-        System.out.println("");
-        System.out.println("");
-        sc.close();
-
-        if(test.equals("A")) {
-            startTestA();
-        }
-        else if(test.equals("B")) {
-            startTestB();
-        }
-        else if(test.equals("C")){
-            startTestA();
-            try {
-                writeJSONFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+        while (test!="Q") {
+            System.out.println("Choose test:");
+            System.out.println("- Test A : Create Tree --> type 'A'");
+            System.out.println("- Test B : Create and Execute Tree --> type 'B'");
+            System.out.println("- Test C : Create JSON file from Test B --> type 'C'");
+            System.out.println("- Test D : Read JSON file");
+            System.out.println("- Q : Quit");
+            System.out.print("Option: ");
+            test = sc.nextLine();
+            System.out.println("");
+            if (test.equals("A")) {
+                startTestA();
+            } else if (test.equals("B")) {
+                startTestB();
+            } else if (test.equals("C")) {
+                try {
+                    writeJSONFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (test.equals("D")) {
+                try {
+                    readJSONFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+            System.out.println();
         }
-        System.exit(0);
+        sc.close();
     }
 
 

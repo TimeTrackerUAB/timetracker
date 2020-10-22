@@ -45,12 +45,32 @@ public abstract class Activity implements Visited{
         }
     }
   }
+  public void setFinalDate(LocalDateTime date){
+    if (finalDate == null){
+      finalDate = date;
+    }
+  }
+  public void setDuration(int dur){
+    duration=dur;
+  }
+
+  public abstract void createTree(Activity father, JSONObject object);
 
   public JSONObject convertToJSONObject(){
     JSONObject act = new JSONObject();
     act.put("duration",duration);
-    act.put("finalDate",finalDate);
-    act.put("initialDate",initialDate);
+    if(finalDate!=null) {
+      act.put("finalDate", finalDate);
+    }
+    else {
+      act.put("finalDate", "null");
+    }
+    if(initialDate!=null) {
+      act.put("initialDate", initialDate);
+    }
+    else{
+      act.put("initialDate", "null");
+    }
     act.put("father", father.getName());
     act.put("description",description);
     act.put("name", name);
@@ -60,12 +80,14 @@ public abstract class Activity implements Visited{
         JSONObject obj = a.convertToJSONObject();
         array.put(obj);
       }
+      act.put("class", "project");
     }
     if(this instanceof Task){
       for(Interval i: ((Task) this).getIntervalList()){
         JSONObject obj = i.convertToJSONObject();
         array.put(obj);
       }
+      act.put("class", "task");
     }
     act.put("childs", array);
     return act;

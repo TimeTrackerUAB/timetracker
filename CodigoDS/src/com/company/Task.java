@@ -1,5 +1,8 @@
 package com.company;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
@@ -18,8 +21,23 @@ public class Task extends Activity{
         nIntervals = 0;
     }
 
+    @Override
+    public void createTree(Activity father, JSONObject object) {
+        JSONArray childs = object.getJSONArray("childs");
+        for (int i = 0; i < childs.length(); i++) {
+            JSONObject obj = childs.getJSONObject(i);
+            Interval interval = new Interval((Task) father, LocalDateTime.parse(obj.getString("initialDate")), LocalDateTime.parse(obj.getString("finalDate")),obj.getInt("duration") );
+            this.addChild(interval);
+        }
+    }
+
     //Getters
     public List<Interval> getIntervalList(){return intervalList;}
+
+    public void addChild(Interval interval) {
+        //Insert activity to child's list
+        intervalList.add(interval);
+    }
 
     public void startTask(){
         Interval interval = new Interval(this);
