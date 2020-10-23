@@ -34,6 +34,7 @@ public class Printer implements PropertyChangeListener, Visitor {
     System.out.println();
   }
 
+  //Get change event from clock
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     print();

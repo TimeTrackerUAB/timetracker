@@ -57,7 +57,7 @@ public class Interval implements PropertyChangeListener, Visited {
       Clock.getInstance().removePropertyChangeListener(this);
     }
 
-    //Update finalTime and duration every period
+    //Get change event from clock and update finalTime and duration every period
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       finalTime=((LocalDateTime)evt.getNewValue());

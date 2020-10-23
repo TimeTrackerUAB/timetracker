@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Clock extends Thread{
+public class Clock{
 //---------------------PROPERTIES------------------------------------------------
 
     private static volatile Clock clock;
