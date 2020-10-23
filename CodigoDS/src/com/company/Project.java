@@ -22,6 +22,14 @@ public class Project extends Activity{
     }
   }
 
+  //Getters
+  public List<Activity> getActivityList(){return activityList;}
+
+  public void addChild(Activity activity) {
+    //Insert activity to child's list
+    activityList.add(activity);
+  }
+
   @Override
   public void createTree(Activity father, JSONObject object) {
     JSONArray childs = object.getJSONArray("childs");
@@ -50,14 +58,6 @@ public class Project extends Activity{
       }
 
     }
-  }
-
-  //Getters
-  public List<Activity> getActivityList(){return activityList;}
-
-  public void addChild(Activity activity) {
-    //Insert activity to child's list
-    activityList.add(activity);
   }
 
   @Override

@@ -13,6 +13,8 @@ public class Task extends Activity{
     private List<Interval> intervalList;
     private int nIntervals;
 
+    public Task(){super();}
+
     public Task(String name, String description, Project father){
         //super uses Activity constructor
         super(name, description, father);
@@ -21,23 +23,8 @@ public class Task extends Activity{
         nIntervals = 0;
     }
 
-    @Override
-    public void createTree(Activity father, JSONObject object) {
-        JSONArray childs = object.getJSONArray("childs");
-        for (int i = 0; i < childs.length(); i++) {
-            JSONObject obj = childs.getJSONObject(i);
-            Interval interval = new Interval((Task) father, LocalDateTime.parse(obj.getString("initialDate")), LocalDateTime.parse(obj.getString("finalDate")),obj.getInt("duration") );
-            this.addChild(interval);
-        }
-    }
-
     //Getters
     public List<Interval> getIntervalList(){return intervalList;}
-
-    public void addChild(Interval interval) {
-        //Insert activity to child's list
-        intervalList.add(interval);
-    }
 
     public void startTask(){
         Interval interval = new Interval(this);
@@ -49,6 +36,21 @@ public class Task extends Activity{
     public void stopTask(){
         for(Interval interval:intervalList){
             interval.stopInterval();
+        }
+    }
+
+    public void addChild(Interval interval) {
+        //Insert activity to child's list
+        intervalList.add(interval);
+    }
+
+    @Override
+    public void createTree(Activity father, JSONObject object) {
+        JSONArray childs = object.getJSONArray("childs");
+        for (int i = 0; i < childs.length(); i++) {
+            JSONObject obj = childs.getJSONObject(i);
+            Interval interval = new Interval((Task) father, LocalDateTime.parse(obj.getString("initialDate")), LocalDateTime.parse(obj.getString("finalDate")),obj.getInt("duration") );
+            this.addChild(interval);
         }
     }
 
