@@ -6,18 +6,27 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Printer implements PropertyChangeListener, Visitor {
+  //---------------------PROPERTIES------------------------------------------------
+
   private Project root;
   private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd hh:mm:ss");
   private Boolean filter = false;
 
+  //------------------METHODS----------------------------------------------------
+
+  //Constructor by default
   public Printer(){root=null;}
+
+  //Constructor with parameters
 
   public Printer(Project r, Boolean filt){root=r; filter=filt;}
 
+  //Call acceptVisitor function of the main Project
   public void print(){
     root.acceptVisitor(this);
   }
 
+  //Print times and duration when they are not null
   public void printTimes(LocalDateTime initTime, LocalDateTime finalTime, int duration){
     if(initTime != null && finalTime != null){
       System.out.print(initTime.format(formatter) + "   " + finalTime.format(formatter) + "   " + duration);
@@ -30,6 +39,7 @@ public class Printer implements PropertyChangeListener, Visitor {
     print();
   }
 
+  //Get every Interval with their properties
   @Override
   public void visitInterval(Interval interval) {
     if(filter){
@@ -44,6 +54,7 @@ public class Printer implements PropertyChangeListener, Visitor {
     }
   }
 
+  //Get every Task with their properties
   @Override
   public void visitTask(Task task) {
     for(Interval interval: task.getIntervalList()){
@@ -67,6 +78,7 @@ public class Printer implements PropertyChangeListener, Visitor {
     }
   }
 
+  //Get every Project with their properties
   @Override
   public void visitProject(Project project) {
     for(Activity activity: project.getActivityList()){

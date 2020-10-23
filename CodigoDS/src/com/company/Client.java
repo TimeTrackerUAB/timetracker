@@ -10,11 +10,14 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 public class Client {
+    //---------------------PROPERTIES------------------------------------------------
 
     private static Project projectRoot;
 
-    Client(){
+    //------------------METHODS----------------------------------------------------
 
+    //Constructor by default
+    Client(){
     }
 
     public static void startTestA(){
@@ -48,6 +51,7 @@ public class Client {
     }
 
     public static void startTestB() throws InterruptedException {
+        //period in ms
         int period = 2000;
         Clock.getInstance().initialize(period);
 
@@ -105,6 +109,7 @@ public class Client {
 
         System.out.println("end of test");
 
+        //save project root to be able to write in JSONFile
         projectRoot=root;
     }
 

@@ -8,11 +8,19 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Project extends Activity{
+//---------------------PROPERTIES------------------------------------------------
 
   private List<Activity> activityList;
 
+  //ACTIVITY LIST
+  //List of children activities (Projects and Tasks) of the current Project
+
+  //------------------METHODS----------------------------------------------------
+
+  //Constructor by default
   public Project(){super();}
 
+  //Constructor with parameters
   public Project(String name, String description, Project father) {
     //super uses Activity constructor
     super(name, description, father);
@@ -25,16 +33,21 @@ public class Project extends Activity{
   //Getters
   public List<Activity> getActivityList(){return activityList;}
 
+  //Insert activity to children list
   public void addChild(Activity activity) {
-    //Insert activity to child's list
     activityList.add(activity);
   }
 
+  //Create tree of Activities from a JSONObject
   @Override
   public void createTree(Activity father, JSONObject object) {
+    //Find children in JSONObject converting it to a JSONArray to be able to iterate it
     JSONArray childs = object.getJSONArray("childs");
     for (int i = 0; i < childs.length(); i++) {
+      //Convert to JSONObject to be able to use getString() and get the properties
       JSONObject obj = childs.getJSONObject(i);
+
+      //If the activity is a Project
       if (obj.getString("class").equals("project")) {
         Project project = new Project(obj.getString("name"), "", (Project)father);
         if(!obj.getString("initialDate").equals("null")) {
@@ -45,6 +58,8 @@ public class Project extends Activity{
         }
         project.setDuration(obj.getInt("duration"));
         project.createTree(project, obj);
+
+        //If the activity is a Task
       } else if (obj.getString("class").equals("task")) {
         Task task = new Task(obj.getString("name"), "", (Project)father);
         if(!obj.getString("initialDate").equals("null")) {
@@ -65,6 +80,7 @@ public class Project extends Activity{
     visitor.visitProject(this);
   }
 
+  //Get the new duration and finalDate
   @Override
   public void update(LocalDateTime finalTime) {
     int dur=0;

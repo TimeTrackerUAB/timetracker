@@ -9,20 +9,25 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Interval implements PropertyChangeListener, Visited {
+//---------------------PROPERTIES------------------------------------------------
 
     private LocalDateTime initTime;
     private LocalDateTime finalTime;
     private int duration;
     private Task fatherTask;
 
-    //Constructor
+  //------------------METHODS----------------------------------------------------
+
+  //Constructor by default
     Interval(Task task){
        fatherTask = task;
        duration = 0;
        initTime = null;
        finalTime = null;
     }
-    Interval(Task father, LocalDateTime iTime, LocalDateTime fTime, int dur){
+
+  //Constructor with parameters
+  Interval(Task father, LocalDateTime iTime, LocalDateTime fTime, int dur){
       fatherTask = father;
       duration = dur;
       initTime = iTime;
@@ -39,28 +44,22 @@ public class Interval implements PropertyChangeListener, Visited {
       finalTime = time;
     }
 
-
+    //Add to observers list the current interval and initialize initDate and
+    //the father Task
     public void startInterval(){
       Clock.getInstance().addPropertyChangeListener(this);
       initTime = Clock.getInstance().getDate();
       fatherTask.setInitialDate(initTime);
-      //System.out.println(fatherTask.getName() + " starts");
     }
 
+    //Remove the interval from observers list
     public void stopInterval(){
       Clock.getInstance().removePropertyChangeListener(this);
-      //System.out.println(fatherTask.getName() + " stops");
     }
 
+    //Update finalTime and duration every period
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-      /*assert evt.getPropertyName().equals("new time");
-      Clock clock = (Clock) evt.getSource();
-      LocalDateTime date = clock.getDate();
-      int period = (int) clock.getPeriod();
-
-      this.setFinalTime(date);
-      duration += period;*/
       finalTime=((LocalDateTime)evt.getNewValue());
       int period = Clock.getInstance().getPeriod();
       duration += period/1000;
@@ -74,14 +73,15 @@ public class Interval implements PropertyChangeListener, Visited {
       visitor.visitInterval(this);
     }
 
-  public JSONObject convertToJSONObject(){
-    JSONObject act = new JSONObject();
-    act.put("duration",duration);
-    act.put("finalDate",finalTime);
-    act.put("initialDate",initTime);
-    act.put("father", fatherTask.getName());
-    act.put("class", "interval");
-    return act;
-  }
+  //Convert Interval properties into a JSONObject
+    public JSONObject convertToJSONObject(){
+      JSONObject act = new JSONObject();
+      act.put("duration",duration);
+      act.put("finalDate",finalTime);
+      act.put("initialDate",initTime);
+      act.put("father", fatherTask.getName());
+      act.put("class", "interval");
+      return act;
+    }
 
 }

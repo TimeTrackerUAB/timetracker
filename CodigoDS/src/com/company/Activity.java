@@ -6,13 +6,38 @@ import org.json.JSONObject;
 import java.time.LocalDateTime;
 
 public abstract class Activity implements Visited{
+//---------------------PROPERTIES------------------------------------------------
+
   protected String name;
   protected String description;
-  protected Project father;
   protected LocalDateTime initialDate;
   protected LocalDateTime finalDate;
   protected int duration;
+  protected Project father;
 
+
+  //INITIAL DATE
+  //For projects, initialDate will be the creation date of the first interval of the
+  //first task associated to the executed project
+  //For tasks, initialDate will be the creation date of it's new interval
+  //They both initialized when startTask() it's called
+
+  //FINAL DATE
+  //For projects, finalDate will be the final date of the first interval of the
+  //first task associated to the executed project
+  //For tasks, finalDate will be the final date of it's new interval
+  //They both finalize when stopTask() it's called
+
+  //DURATION
+  //Elapsed time between finalDate and initialDate in seconds
+
+  //FATHER
+  //Every activity save his father Project, unless the project is root
+
+
+  //------------------METHODS----------------------------------------------------
+
+  //Constructor by default
   public Activity(){
     name = "";
     description = "";
@@ -22,6 +47,7 @@ public abstract class Activity implements Visited{
     duration = 0;
   }
 
+  //Constructor with parameters
   public Activity(String activityName, String activityDescription, Project fatherProject){
     name = activityName;
     description = activityDescription;
@@ -54,8 +80,11 @@ public abstract class Activity implements Visited{
     duration=dur;
   }
 
+
+  //Abstract class for createTree methods of Activities types
   public abstract void createTree(Activity father, JSONObject object);
 
+  //Convert Activity properties into a JSONObject
   public JSONObject convertToJSONObject(){
     JSONObject act = new JSONObject();
     act.put("duration",duration);
@@ -75,14 +104,18 @@ public abstract class Activity implements Visited{
     act.put("description",description);
     act.put("name", name);
     JSONArray array = new JSONArray();
+    //If the Activity is a Project
     if(this instanceof Project){
+      //Get list of Project children and put into JSONArray
       for(Activity a: ((Project) this).getActivityList()){
         JSONObject obj = a.convertToJSONObject();
         array.put(obj);
       }
       act.put("class", "project");
     }
+    //If the Activity is a Task
     if(this instanceof Task){
+      //Get list of Task children and put into JSONArray
       for(Interval i: ((Task) this).getIntervalList()){
         JSONObject obj = i.convertToJSONObject();
         array.put(obj);
@@ -93,6 +126,7 @@ public abstract class Activity implements Visited{
     return act;
   }
 
+  //Abstract class for update methods of Activities types
   public abstract void update(LocalDateTime finalTime);
 
 }

@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Clock extends Thread{
+//---------------------PROPERTIES------------------------------------------------
 
     private static volatile Clock clock;
     private LocalDateTime date;
@@ -14,7 +15,9 @@ public class Clock extends Thread{
     private PropertyChangeSupport support;
     private int period;
 
-    //Constructor
+  //------------------METHODS----------------------------------------------------
+
+  //Constructor
     Clock(){
       date = LocalDateTime.now();
       support = new PropertyChangeSupport(this);
@@ -47,9 +50,7 @@ public class Clock extends Thread{
           //all observers in parallel to the main program
             @Override
             public void run () {
-              //LocalDateTime time = LocalDateTime.now();
               setTime(LocalDateTime.now());
-              //System.out.println("Time: " + LocalDateTime.now());
             }
           },0, period);
     }

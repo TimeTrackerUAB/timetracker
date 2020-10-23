@@ -9,41 +9,50 @@ import java.util.ArrayList;
 
 
 public class Task extends Activity{
+    //---------------------PROPERTIES------------------------------------------------
+
 
     private List<Interval> intervalList;
-    private int nIntervals;
 
+    //INTERVAL LIST
+    //List of intervals of the current Task
+
+    //------------------METHODS----------------------------------------------------
+
+    //Constructor by default
     public Task(){super();}
 
+    //Constructor with parameters
     public Task(String name, String description, Project father){
         //super uses Activity constructor
         super(name, description, father);
         father.addChild(this);
         intervalList = new ArrayList<Interval>();
-        nIntervals = 0;
     }
 
     //Getters
     public List<Interval> getIntervalList(){return intervalList;}
 
+    //New Interval is created and added to intervalList
     public void startTask(){
         Interval interval = new Interval(this);
         interval.startInterval();
         intervalList.add(interval);
-        nIntervals++;
     }
 
+    //Stop the interval
     public void stopTask(){
         for(Interval interval:intervalList){
             interval.stopInterval();
         }
     }
 
+    //Insert activity to children list
     public void addChild(Interval interval) {
-        //Insert activity to child's list
         intervalList.add(interval);
     }
 
+    //Create tree of Intervals from a JSONObject
     @Override
     public void createTree(Activity father, JSONObject object) {
         JSONArray childs = object.getJSONArray("childs");
@@ -59,6 +68,7 @@ public class Task extends Activity{
         visitor.visitTask(this);
     }
 
+    //Get the new duration and finalDate
     @Override
     public void update(LocalDateTime finalTime) {
         int dur=0;
