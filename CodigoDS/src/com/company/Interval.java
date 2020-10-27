@@ -7,8 +7,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Interval implements PropertyChangeListener, Visited {
+public class Interval implements Visited, Observer {
 //---------------------PROPERTIES------------------------------------------------
 
     private LocalDateTime initTime;
@@ -47,18 +49,20 @@ public class Interval implements PropertyChangeListener, Visited {
     //Add to observers list the current interval and initialize initDate and
     //the father Task
     public void startInterval(){
-      Clock.getInstance().addPropertyChangeListener(this);
+      //Clock.getInstance().addPropertyChangeListener(this);
+      Clock.getInstance().addObserver(this);
       initTime = Clock.getInstance().getDate();
       fatherTask.setInitialDate(initTime);
     }
 
     //Remove the interval from observers list
     public void stopInterval(){
-      Clock.getInstance().removePropertyChangeListener(this);
+      //Clock.getInstance().removePropertyChangeListener(this);
+      Clock.getInstance().deleteObserver(this);
     }
 
     //Get change event from clock and update finalTime and duration every period
-    @Override
+    /*@Override
     public void propertyChange(PropertyChangeEvent evt) {
       finalTime=((LocalDateTime)evt.getNewValue());
       int period = Clock.getInstance().getPeriod();
@@ -66,7 +70,7 @@ public class Interval implements PropertyChangeListener, Visited {
       //Update with new date and increment duration of all predecessors
       fatherTask.update(finalTime);
 
-    }
+    }*/
 
     @Override
     public void acceptVisitor(Visitor visitor) {
@@ -84,4 +88,12 @@ public class Interval implements PropertyChangeListener, Visited {
       return act;
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+      finalTime=(LocalDateTime)arg;
+      int period = Clock.getInstance().getPeriod();
+      duration += period/1000;
+      //Update with new date and increment duration of all predecessors
+      fatherTask.update(finalTime);
+    }
 }

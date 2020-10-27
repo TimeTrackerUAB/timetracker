@@ -3,16 +3,17 @@ package com.company;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.time.LocalDateTime;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Clock{
+public class Clock extends Observable {
 //---------------------PROPERTIES------------------------------------------------
 
     private static volatile Clock clock;
     private LocalDateTime date;
     private Timer timer;
-    private PropertyChangeSupport support;
     private int period;
 
   //------------------METHODS----------------------------------------------------
@@ -20,7 +21,6 @@ public class Clock{
   //Constructor
     Clock(){
       date = LocalDateTime.now();
-      support = new PropertyChangeSupport(this);
       period = 0;
     }
 
@@ -50,6 +50,7 @@ public class Clock{
           //all observers in parallel to the main program
             @Override
             public void run () {
+              setChanged();
               setTime(LocalDateTime.now());
             }
           },0, period);
@@ -58,12 +59,22 @@ public class Clock{
 
     public void setTime(LocalDateTime time){
       //Fire notifies all the observers that there have been changes
-      support.firePropertyChange("new time", this.date, time);
+      //support.firePropertyChange("new time", this.date, time);
+      notifyObservers(this.date);
       this.date = time;
     }
 
+    @Override
+    public synchronized void addObserver(Observer o) {
+      super.addObserver(o);
+    }
 
-    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+    @Override
+    public synchronized void deleteObserver(Observer o) {
+      super.deleteObserver(o);
+    }
+
+    /*public void addPropertyChangeListener(PropertyChangeListener pcl) {
       //Add an item to clock observers list
       support.addPropertyChangeListener(pcl);
     }
@@ -71,6 +82,6 @@ public class Clock{
     public void removePropertyChangeListener(PropertyChangeListener pcl) {
       //Delete an item from clock observers list
       support.removePropertyChangeListener(pcl);
-    }
+    }*/
 
 }

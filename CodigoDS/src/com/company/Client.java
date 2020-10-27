@@ -75,7 +75,8 @@ public class Client {
         Task first_milestone = new Task("first milestone", "", project_time_tracker);
 
         Printer printer = new Printer(root, true);
-        Clock.getInstance().addPropertyChangeListener(printer);
+        //Clock.getInstance().addPropertyChangeListener(printer);
+        Clock.getInstance().addObserver(printer);
 
         System.out.println("                              initial date          final date            duration");
         System.out.println("start test");
@@ -104,7 +105,8 @@ public class Client {
         transportation.stopTask();
         Thread.sleep(2000);
 
-        Clock.getInstance().removePropertyChangeListener(printer);
+        //Clock.getInstance().removePropertyChangeListener(printer);
+        Clock.getInstance().deleteObserver(printer);
 
         System.out.println("end of test");
 

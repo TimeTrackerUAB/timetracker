@@ -4,8 +4,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Printer implements PropertyChangeListener, Visitor {
+public class Printer implements Visitor, Observer {
   //---------------------PROPERTIES------------------------------------------------
 
   private Project root;
@@ -35,10 +37,10 @@ public class Printer implements PropertyChangeListener, Visitor {
   }
 
   //Get change event from clock
-  @Override
+  /*@Override
   public void propertyChange(PropertyChangeEvent evt) {
     print();
-  }
+  }*/
 
   //Get every Interval with their properties
   @Override
@@ -103,4 +105,8 @@ public class Printer implements PropertyChangeListener, Visitor {
     }
   }
 
+  @Override
+  public void update(Observable o, Object arg) {
+    print();
+  }
 }
