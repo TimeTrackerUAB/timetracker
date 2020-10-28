@@ -60,8 +60,8 @@ public class Clock extends Observable {
     public void setTime(LocalDateTime time){
       //Fire notifies all the observers that there have been changes
       //support.firePropertyChange("new time", this.date, time);
-      notifyObservers(this.date);
       this.date = time;
+      notifyObservers();
     }
 
     @Override

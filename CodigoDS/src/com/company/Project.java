@@ -3,6 +3,7 @@ package com.company;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class Project extends Activity{
         if(!obj.getString("finalDate").equals("null")){
           project.setFinalDate(LocalDateTime.parse(obj.getString("finalDate")));
         }
-        project.setDuration(obj.getInt("duration"));
+        project.setDuration(Duration.ofSeconds(obj.getInt("duration")));
         project.createTree(project, obj);
 
         //If the activity is a Task
@@ -68,7 +69,7 @@ public class Project extends Activity{
         if(!obj.getString("finalDate").equals("null")){
           task.setFinalDate(LocalDateTime.parse(obj.getString("finalDate")));
         }
-        task.setDuration(obj.getInt("duration"));
+        task.setDuration(Duration.ofSeconds(obj.getInt("duration")));
         task.createTree(task, obj);
       }
 
@@ -83,9 +84,11 @@ public class Project extends Activity{
   //Get the new duration and finalDate
   @Override
   public void update(LocalDateTime finalTime) {
-    int dur=0;
+    Duration dur=Duration.ZERO;
     for(Activity activity:activityList){
-      dur+=activity.getDuration();
+      if(!activity.getDuration().isZero()) {
+        dur = dur.plus(activity.getDuration());
+      }
     }
     duration=dur;
     finalDate=finalTime;

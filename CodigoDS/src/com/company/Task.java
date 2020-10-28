@@ -3,6 +3,7 @@ package com.company;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class Task extends Activity{
         JSONArray childs = object.getJSONArray("childs");
         for (int i = 0; i < childs.length(); i++) {
             JSONObject obj = childs.getJSONObject(i);
-            Interval interval = new Interval((Task) father, LocalDateTime.parse(obj.getString("initialDate")), LocalDateTime.parse(obj.getString("finalDate")),obj.getInt("duration") );
+            Interval interval = new Interval((Task) father, LocalDateTime.parse(obj.getString("initialDate")), LocalDateTime.parse(obj.getString("finalDate")), (Duration.ofSeconds(obj.getInt("duration"))));
             this.addChild(interval);
         }
     }
@@ -71,9 +72,11 @@ public class Task extends Activity{
     //Get the new duration and finalDate
     @Override
     public void update(LocalDateTime finalTime) {
-        int dur=0;
+        Duration dur=Duration.ZERO;
         for(Interval interval:intervalList){
-            dur+=interval.getDuration();
+            if(!interval.getDuration().isZero()) {
+                dur = dur.plus(interval.getDuration());
+            }
         }
         duration=dur;
         finalDate=finalTime;

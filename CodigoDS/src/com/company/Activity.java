@@ -3,6 +3,7 @@ package com.company;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public abstract class Activity implements Visited{
@@ -12,7 +13,7 @@ public abstract class Activity implements Visited{
   protected String description;
   protected LocalDateTime initialDate;
   protected LocalDateTime finalDate;
-  protected int duration;
+  protected Duration duration;
   protected Project father;
 
 
@@ -44,7 +45,7 @@ public abstract class Activity implements Visited{
     father = null;
     initialDate = null;
     finalDate = null;
-    duration = 0;
+    duration = Duration.ZERO;
   }
 
   //Constructor with parameters
@@ -52,12 +53,13 @@ public abstract class Activity implements Visited{
     name = activityName;
     description = activityDescription;
     father = fatherProject;
+    duration = Duration.ZERO;
   }
 
   //Getters
   public String getName(){return name;}
   public String getDescription(){return description;}
-  public int getDuration(){return duration;}
+  public Duration getDuration(){return duration;}
   public Project getFather() {return father;}
   public LocalDateTime getInitialDate() {return initialDate;}
   public LocalDateTime getFinalDate() {return finalDate;}
@@ -76,7 +78,7 @@ public abstract class Activity implements Visited{
       finalDate = date;
     }
   }
-  public void setDuration(int dur){
+  public void setDuration(Duration dur){
     duration=dur;
   }
 
@@ -87,7 +89,7 @@ public abstract class Activity implements Visited{
   //Convert Activity properties into a JSONObject
   public JSONObject convertToJSONObject(){
     JSONObject act = new JSONObject();
-    act.put("duration",duration);
+    act.put("duration",duration.toSeconds());
     if(finalDate!=null) {
       act.put("finalDate", finalDate);
     }

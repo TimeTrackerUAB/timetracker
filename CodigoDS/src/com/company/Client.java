@@ -1,6 +1,7 @@
 package com.company;
 
 import java.io.*;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -117,7 +118,7 @@ public class Client {
     public static void writeJSONFile() throws IOException{
         JSONObject root = new JSONObject();
         root.put("name", projectRoot.getName());
-        root.put("duration",projectRoot.getDuration());
+        root.put("duration",projectRoot.getDuration().toSeconds());
         root.put("finalDate",projectRoot.getFinalDate());
         root.put("initialDate",projectRoot.getInitialDate());
         root.put("father", "null");
@@ -149,7 +150,7 @@ public class Client {
         Project root = new Project(object.getString("name"),"",null);
         root.setInitialDate(LocalDateTime.parse(object.getString("initialDate")));
         root.setFinalDate(LocalDateTime.parse(object.getString("finalDate")));
-        root.setDuration(object.getInt("duration"));
+        root.setDuration(Duration.ofSeconds(object.getInt("duration")));
         root.createTree(root, object);
 
         Printer printer = new Printer(root, false);

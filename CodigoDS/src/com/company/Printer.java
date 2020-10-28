@@ -2,6 +2,7 @@ package com.company;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Observable;
@@ -29,9 +30,9 @@ public class Printer implements Visitor, Observer {
   }
 
   //Print times and duration when they are not null
-  public void printTimes(LocalDateTime initTime, LocalDateTime finalTime, int duration){
+  public void printTimes(LocalDateTime initTime, LocalDateTime finalTime, Duration duration){
     if(initTime != null && finalTime != null){
-      System.out.print(initTime.format(formatter) + "   " + finalTime.format(formatter) + "   " + duration);
+      System.out.print(initTime.format(formatter) + "   " + finalTime.format(formatter) + "   " + duration.toSecondsPart());
     }
     System.out.println();
   }

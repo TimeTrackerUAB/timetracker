@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Observable;
@@ -15,7 +16,7 @@ public class Interval implements Visited, Observer {
 
     private LocalDateTime initTime;
     private LocalDateTime finalTime;
-    private int duration;
+    private Duration duration;
     private Task fatherTask;
 
   //------------------METHODS----------------------------------------------------
@@ -23,13 +24,13 @@ public class Interval implements Visited, Observer {
   //Constructor by default
     Interval(Task task){
        fatherTask = task;
-       duration = 0;
+       duration = Duration.ZERO;
        initTime = null;
        finalTime = null;
     }
 
   //Constructor with parameters
-  Interval(Task father, LocalDateTime iTime, LocalDateTime fTime, int dur){
+  Interval(Task father, LocalDateTime iTime, LocalDateTime fTime, Duration dur){
       fatherTask = father;
       duration = dur;
       initTime = iTime;
@@ -39,7 +40,7 @@ public class Interval implements Visited, Observer {
     //Getters
     public LocalDateTime getInitTime(){return initTime;}
     public LocalDateTime getFinalTime(){return finalTime;}
-    public int getDuration() {return duration; }
+    public Duration getDuration() {return duration; }
 
     //Setters
     public void setFinalTime(LocalDateTime time){
@@ -80,7 +81,7 @@ public class Interval implements Visited, Observer {
   //Convert Interval properties into a JSONObject
     public JSONObject convertToJSONObject(){
       JSONObject act = new JSONObject();
-      act.put("duration",duration);
+      act.put("duration",duration.toSeconds());
       act.put("finalDate",finalTime);
       act.put("initialDate",initTime);
       act.put("father", fatherTask.getName());
@@ -90,9 +91,10 @@ public class Interval implements Visited, Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-      finalTime=(LocalDateTime)arg;
-      int period = Clock.getInstance().getPeriod();
-      duration += period/1000;
+      finalTime=Clock.getInstance().getDate();
+      //long period = Clock.getInstance().getPeriod();
+      //duration = Duration.between(initTime, finalTime);
+      duration = duration.plusSeconds(Clock.getInstance().getPeriod()/1000);
       //Update with new date and increment duration of all predecessors
       fatherTask.update(finalTime);
     }
