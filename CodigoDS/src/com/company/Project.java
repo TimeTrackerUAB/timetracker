@@ -1,38 +1,39 @@
 package com.company;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.ArrayList;
+//Class Project
+//Allows you to create the representation of a project
+//which may contain another project or a task
 
-public class Project extends Activity{
-//---------------------PROPERTIES------------------------------------------------
+public class Project extends Activity {
 
   private List<Activity> activityList;
 
-  //ACTIVITY LIST
-  //List of children activities (Projects and Tasks) of the current Project
-
-  //------------------METHODS----------------------------------------------------
-
   //Constructor by default
-  public Project(){super();}
+  public Project() {
+    super();
+  }
 
   //Constructor with parameters
   public Project(String name, String description, Project father) {
     //super uses Activity constructor
     super(name, description, father);
     activityList = new ArrayList<Activity>();
-    if(father!=null) {
+    if (father != null) {
       father.addChild(this);
     }
   }
 
   //Getters
-  public List<Activity> getActivityList(){return activityList;}
+  public List<Activity> getActivityList() {
+    return activityList;
+  }
 
   //Insert activity to children list
   public void addChild(Activity activity) {
@@ -50,11 +51,11 @@ public class Project extends Activity{
 
       //If the activity is a Project
       if (obj.getString("class").equals("project")) {
-        Project project = new Project(obj.getString("name"), "", (Project)father);
-        if(!obj.getString("initialDate").equals("null")) {
+        Project project = new Project(obj.getString("name"), "", (Project) father);
+        if (!obj.getString("initialDate").equals("null")) {
           project.setInitialDate(LocalDateTime.parse(obj.getString("initialDate")));
         }
-        if(!obj.getString("finalDate").equals("null")){
+        if (!obj.getString("finalDate").equals("null")) {
           project.setFinalDate(LocalDateTime.parse(obj.getString("finalDate")));
         }
         project.setDuration(Duration.ofSeconds(obj.getInt("duration")));
@@ -62,11 +63,11 @@ public class Project extends Activity{
 
         //If the activity is a Task
       } else if (obj.getString("class").equals("task")) {
-        Task task = new Task(obj.getString("name"), "", (Project)father);
-        if(!obj.getString("initialDate").equals("null")) {
+        Task task = new Task(obj.getString("name"), "", (Project) father);
+        if (!obj.getString("initialDate").equals("null")) {
           task.setInitialDate(LocalDateTime.parse(obj.getString("initialDate")));
         }
-        if(!obj.getString("finalDate").equals("null")){
+        if (!obj.getString("finalDate").equals("null")) {
           task.setFinalDate(LocalDateTime.parse(obj.getString("finalDate")));
         }
         task.setDuration(Duration.ofSeconds(obj.getInt("duration")));
@@ -84,15 +85,15 @@ public class Project extends Activity{
   //Get the new duration and finalDate
   @Override
   public void update(LocalDateTime finalTime) {
-    Duration dur=Duration.ZERO;
-    for(Activity activity:activityList){
-      if(!activity.getDuration().isZero()) {
+    Duration dur = Duration.ZERO;
+    for (Activity activity : activityList) {
+      if (!activity.getDuration().isZero()) {
         dur = dur.plus(activity.getDuration());
       }
     }
-    duration=dur;
-    finalDate=finalTime;
-    if(father != null){
+    duration = dur;
+    finalDate = finalTime;
+    if (father != null) {
       father.update(finalTime);
     }
   }

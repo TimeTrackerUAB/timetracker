@@ -1,101 +1,89 @@
 package com.company;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Observable;
 import java.util.Observer;
+import org.json.JSONObject;
+
+//Class Interval
+//It allows you to create the representation of a time interval
+//from a start and end date
 
 public class Interval implements Visited, Observer {
-//---------------------PROPERTIES------------------------------------------------
 
-    private LocalDateTime initTime;
-    private LocalDateTime finalTime;
-    private Duration duration;
-    private Task fatherTask;
-
-  //------------------METHODS----------------------------------------------------
+  private LocalDateTime initTime;
+  private LocalDateTime finalTime;
+  private Duration duration;
+  private Task fatherTask;
 
   //Constructor by default
-    Interval(Task task){
-       fatherTask = task;
-       duration = Duration.ZERO;
-       initTime = null;
-       finalTime = null;
-    }
+  Interval(Task task) {
+    fatherTask = task;
+    duration = Duration.ZERO;
+    initTime = null;
+    finalTime = null;
+  }
 
   //Constructor with parameters
-  Interval(Task father, LocalDateTime iTime, LocalDateTime fTime, Duration dur){
-      fatherTask = father;
-      duration = dur;
-      initTime = iTime;
-      finalTime = fTime;
-    }
+  Interval(Task fatherTask, LocalDateTime initTime, LocalDateTime finalTime, Duration duration) {
+    this.fatherTask = fatherTask;
+    this.duration = duration;
+    this.initTime = initTime;
+    this.finalTime = finalTime;
+  }
 
-    //Getters
-    public LocalDateTime getInitTime(){return initTime;}
-    public LocalDateTime getFinalTime(){return finalTime;}
-    public Duration getDuration() {return duration; }
+  //Getters
+  public LocalDateTime getInitTime() {
+    return initTime;
+  }
 
-    //Setters
-    public void setFinalTime(LocalDateTime time){
-      finalTime = time;
-    }
+  public LocalDateTime getFinalTime() {
+    return finalTime;
+  }
 
-    //Add to observers list the current interval and initialize initDate and
-    //the father Task
-    public void startInterval(){
-      //Clock.getInstance().addPropertyChangeListener(this);
-      Clock.getInstance().addObserver(this);
-      initTime = Clock.getInstance().getDate();
-      fatherTask.setInitialDate(initTime);
-    }
+  public Duration getDuration() {
+    return duration;
+  }
 
-    //Remove the interval from observers list
-    public void stopInterval(){
-      //Clock.getInstance().removePropertyChangeListener(this);
-      Clock.getInstance().deleteObserver(this);
-    }
+  //Setters
+  public void setFinalTime(LocalDateTime time) {
+    finalTime = time;
+  }
 
-    //Get change event from clock and update finalTime and duration every period
-    /*@Override
-    public void propertyChange(PropertyChangeEvent evt) {
-      finalTime=((LocalDateTime)evt.getNewValue());
-      int period = Clock.getInstance().getPeriod();
-      duration += period/1000;
-      //Update with new date and increment duration of all predecessors
-      fatherTask.update(finalTime);
+  //Add to observers list the current interval and initialize initDate and
+  //the father Task
+  public void startInterval() {
+    Clock.getInstance().addObserver(this);
+    initTime = Clock.getInstance().getDate();
+    fatherTask.setInitialDate(initTime);
+  }
 
-    }*/
+  //Remove the interval from observers list
+  public void stopInterval() {
+    Clock.getInstance().deleteObserver(this);
+  }
 
-    @Override
-    public void acceptVisitor(Visitor visitor) {
-      visitor.visitInterval(this);
-    }
+  @Override
+  public void acceptVisitor(Visitor visitor) {
+    visitor.visitInterval(this);
+  }
 
   //Convert Interval properties into a JSONObject
-    public JSONObject convertToJSONObject(){
-      JSONObject act = new JSONObject();
-      act.put("duration",duration.toSeconds());
-      act.put("finalDate",finalTime);
-      act.put("initialDate",initTime);
-      act.put("father", fatherTask.getName());
-      act.put("class", "interval");
-      return act;
-    }
+  public JSONObject convertToJsonObject() {
+    JSONObject act = new JSONObject();
+    act.put("duration", duration.toSeconds());
+    act.put("finalDate", finalTime);
+    act.put("initialDate", initTime);
+    act.put("father", fatherTask.getName());
+    act.put("class", "interval");
+    return act;
+  }
 
-    @Override
-    public void update(Observable o, Object arg) {
-      finalTime=Clock.getInstance().getDate();
-      //long period = Clock.getInstance().getPeriod();
-      //duration = Duration.between(initTime, finalTime);
-      duration = duration.plusSeconds(Clock.getInstance().getPeriod()/1000);
-      //Update with new date and increment duration of all predecessors
-      fatherTask.update(finalTime);
-    }
+  @Override
+  public void update(Observable o, Object arg) {
+    finalTime = Clock.getInstance().getDate();
+    duration = duration.plusSeconds(Clock.getInstance().getPeriod() / 1000);
+    fatherTask.update(finalTime);
+  }
 }

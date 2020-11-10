@@ -1,13 +1,17 @@
 package com.company;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public abstract class Activity implements Visited{
-//---------------------PROPERTIES------------------------------------------------
+//Class Activity
+//It allows you to create or generate the tree hierarchy
+//with nodes of different types (task, project)
+
+public abstract class Activity implements Visited {
 
   protected String name;
   protected String description;
@@ -15,7 +19,7 @@ public abstract class Activity implements Visited{
   protected LocalDateTime finalDate;
   protected Duration duration;
   protected Project father;
-
+  static Logger logger = LoggerFactory.getLogger("Activity");
 
   //INITIAL DATE
   //For projects, initialDate will be the creation date of the first interval of the
@@ -35,11 +39,8 @@ public abstract class Activity implements Visited{
   //FATHER
   //Every activity save his father Project, unless the project is root
 
-
-  //------------------METHODS----------------------------------------------------
-
   //Constructor by default
-  public Activity(){
+  public Activity() {
     name = "";
     description = "";
     father = null;
@@ -49,7 +50,7 @@ public abstract class Activity implements Visited{
   }
 
   //Constructor with parameters
-  public Activity(String activityName, String activityDescription, Project fatherProject){
+  public Activity(String activityName, String activityDescription, Project fatherProject) {
     name = activityName;
     description = activityDescription;
     father = fatherProject;
@@ -57,29 +58,48 @@ public abstract class Activity implements Visited{
   }
 
   //Getters
-  public String getName(){return name;}
-  public String getDescription(){return description;}
-  public Duration getDuration(){return duration;}
-  public Project getFather() {return father;}
-  public LocalDateTime getInitialDate() {return initialDate;}
-  public LocalDateTime getFinalDate() {return finalDate;}
+  public String getName() {
+    return name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public Duration getDuration() {
+    return duration;
+  }
+
+  public Project getFather() {
+    return father;
+  }
+
+  public LocalDateTime getInitialDate() {
+    return initialDate;
+  }
+
+  public LocalDateTime getFinalDate() {
+    return finalDate;
+  }
 
   //Setters
-  public void setInitialDate(LocalDateTime date){
-    if (initialDate == null){
+  public void setInitialDate(LocalDateTime date) {
+    if (initialDate == null) {
       initialDate = date;
-      if(father != null){
-          father.setInitialDate(date);
-        }
+      if (father != null) {
+        father.setInitialDate(date);
+      }
     }
   }
-  public void setFinalDate(LocalDateTime date){
-    if (finalDate == null){
+
+  public void setFinalDate(LocalDateTime date) {
+    if (finalDate == null) {
       finalDate = date;
     }
   }
-  public void setDuration(Duration dur){
-    duration=dur;
+
+  public void setDuration(Duration duration) {
+    this.duration = duration;
   }
 
 
@@ -87,39 +107,37 @@ public abstract class Activity implements Visited{
   public abstract void createTree(Activity father, JSONObject object);
 
   //Convert Activity properties into a JSONObject
-  public JSONObject convertToJSONObject(){
+  public JSONObject convertToJsonObject() {
     JSONObject act = new JSONObject();
-    act.put("duration",duration.toSeconds());
-    if(finalDate!=null) {
+    act.put("duration", duration.toSeconds());
+    if (finalDate != null) {
       act.put("finalDate", finalDate);
-    }
-    else {
+    } else {
       act.put("finalDate", "null");
     }
-    if(initialDate!=null) {
+    if (initialDate != null) {
       act.put("initialDate", initialDate);
-    }
-    else{
+    } else {
       act.put("initialDate", "null");
     }
     act.put("father", father.getName());
-    act.put("description",description);
+    act.put("description", description);
     act.put("name", name);
     JSONArray array = new JSONArray();
     //If the Activity is a Project
-    if(this instanceof Project){
+    if (this instanceof Project) {
       //Get list of Project children and put into JSONArray
-      for(Activity a: ((Project) this).getActivityList()){
-        JSONObject obj = a.convertToJSONObject();
+      for (Activity a : ((Project) this).getActivityList()) {
+        JSONObject obj = a.convertToJsonObject();
         array.put(obj);
       }
       act.put("class", "project");
     }
     //If the Activity is a Task
-    if(this instanceof Task){
+    if (this instanceof Task) {
       //Get list of Task children and put into JSONArray
-      for(Interval i: ((Task) this).getIntervalList()){
-        JSONObject obj = i.convertToJSONObject();
+      for (Interval i : ((Task) this).getIntervalList()) {
+        JSONObject obj = i.convertToJsonObject();
         array.put(obj);
       }
       act.put("class", "task");

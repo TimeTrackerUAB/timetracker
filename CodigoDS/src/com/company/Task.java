@@ -1,87 +1,87 @@
 package com.company;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.ArrayList;
+//Class Task
+//It allows to create the representation of a task
+//that is defined by a specific time interval
 
+public class Task extends Activity {
 
-public class Task extends Activity{
-    //---------------------PROPERTIES------------------------------------------------
+  private List<Interval> intervalList;
 
+  //Constructor by default
+  public Task() {
+    super();
+  }
 
-    private List<Interval> intervalList;
+  //Constructor with parameters
+  public Task(String name, String description, Project father) {
+    //super uses Activity constructor
+    super(name, description, father);
+    father.addChild(this);
+    intervalList = new ArrayList<Interval>();
+  }
 
-    //INTERVAL LIST
-    //List of intervals of the current Task
+  //Getters
+  public List<Interval> getIntervalList() {
+    return intervalList;
+  }
 
-    //------------------METHODS----------------------------------------------------
+  //New Interval is created and added to intervalList
+  public void startTask() {
+    Interval interval = new Interval(this);
+    interval.startInterval();
+    intervalList.add(interval);
+  }
 
-    //Constructor by default
-    public Task(){super();}
-
-    //Constructor with parameters
-    public Task(String name, String description, Project father){
-        //super uses Activity constructor
-        super(name, description, father);
-        father.addChild(this);
-        intervalList = new ArrayList<Interval>();
+  public void stopTask() {
+    for (Interval interval : intervalList) {
+      interval.stopInterval();
     }
+  }
 
-    //Getters
-    public List<Interval> getIntervalList(){return intervalList;}
+  public void addChild(Interval interval) {
+    intervalList.add(interval);
+  }
 
-    //New Interval is created and added to intervalList
-    public void startTask(){
-        Interval interval = new Interval(this);
-        interval.startInterval();
-        intervalList.add(interval);
+  //Create tree of Intervals from a JSONObject
+  @Override
+  public void createTree(Activity father, JSONObject object) {
+    JSONArray childs = object.getJSONArray("childs");
+    for (int i = 0; i < childs.length(); i++) {
+      JSONObject obj = childs.getJSONObject(i);
+      Interval interval = new Interval((Task) father,
+          LocalDateTime.parse(obj.getString("initialDate")),
+          LocalDateTime.parse(obj.getString("finalDate")),
+          (Duration.ofSeconds(obj.getInt("duration"))));
+      this.addChild(interval);
     }
+  }
 
-    //Stop the interval
-    public void stopTask(){
-        for(Interval interval:intervalList){
-            interval.stopInterval();
-        }
-    }
+  @Override
+  public void acceptVisitor(Visitor visitor) {
+    visitor.visitTask(this);
+  }
 
-    //Insert activity to children list
-    public void addChild(Interval interval) {
-        intervalList.add(interval);
+  //Get the new duration and finalDate
+  @Override
+  public void update(LocalDateTime finalTime) {
+    Duration dur = Duration.ZERO;
+    for (Interval interval : intervalList) {
+      if (!interval.getDuration().isZero()) {
+        dur = dur.plus(interval.getDuration());
+      }
     }
-
-    //Create tree of Intervals from a JSONObject
-    @Override
-    public void createTree(Activity father, JSONObject object) {
-        JSONArray childs = object.getJSONArray("childs");
-        for (int i = 0; i < childs.length(); i++) {
-            JSONObject obj = childs.getJSONObject(i);
-            Interval interval = new Interval((Task) father, LocalDateTime.parse(obj.getString("initialDate")), LocalDateTime.parse(obj.getString("finalDate")), (Duration.ofSeconds(obj.getInt("duration"))));
-            this.addChild(interval);
-        }
+    duration = dur;
+    finalDate = finalTime;
+    if (father != null) {
+      father.update(finalTime);
     }
-
-    @Override
-    public void acceptVisitor(Visitor visitor) {
-        visitor.visitTask(this);
-    }
-
-    //Get the new duration and finalDate
-    @Override
-    public void update(LocalDateTime finalTime) {
-        Duration dur=Duration.ZERO;
-        for(Interval interval:intervalList){
-            if(!interval.getDuration().isZero()) {
-                dur = dur.plus(interval.getDuration());
-            }
-        }
-        duration=dur;
-        finalDate=finalTime;
-        if(father != null){
-            father.update(finalTime);
-        }
-    }
+  }
 }

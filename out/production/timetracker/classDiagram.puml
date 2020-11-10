@@ -8,6 +8,7 @@ abstract class Activity{
 - finalDate: LocalDateTime
 - duration: int
 - father: Project
++ Activity()
 + Activity(String name, String description, Project father)
 + String getName()
 + String getDescription()
@@ -16,6 +17,9 @@ abstract class Activity{
 + LocalDateTime getInitialDate()
 + LocalDateTime getFinalDate()
 + setInitialDate(LocalDateTime date)
++ setFinalDate(LocalDateTime date)
++ setDuration(int dur)
++ createTree(Activity father, JSONObject object)
 + JSONObject convertToJSONObject()
 + update()
 
@@ -25,9 +29,12 @@ class Task{
 - intervalList: List<Interval>
 - nIntervals: int
 + Task()
++ Task(String name, String description, Project father)
 + List<Interval> getIntervalList()
-+ initTask()
++ startTask()
 + stopTask()
++ addChild(Interval interval)
++ createTree(Activity father, JSONObject object)
 + acceptVisitor()
 + update()
 }
@@ -35,8 +42,13 @@ class Task{
 class Project{
 - activityList: List<Activity>
 + Project()
-+ addActivity()
-+ deleteActivity()
++ Project(String name, String description, Project father)
++ List<Activity> getActivityList()
++ addChild(Activity activity)
++ createTree(Activity father, JSONObject object)
++ acceptVisitor(Visitor visitor)
++ update()
+
 }
 
 class Clock{
@@ -55,12 +67,15 @@ class Clock{
 + removePropertyChangeListener(PropertyChangeListener pcl)
 }
 
+class Thread{}
+
 class Interval{
 - initTime: LocalDateTime
 - finalTime: LocalDateTime
 - duration: int
 - fatherTask: Task
 + Interval(Task task)
++ Interval(Task father, LocalDateTime iTime, LocalDateTime fTime, int dur)
 + LocalDateTime getInitTime()
 + LocalDateTime getFinalTime()
 + int getDuration()
@@ -74,8 +89,6 @@ class Interval{
 
 class Client{
 + main()
-+ printMenu()
-+ clientMenu()
 + startTestA()
 + startTestB()
 + writeJSONFile()
@@ -83,19 +96,48 @@ class Client{
 }
 
 class Printer{
+- root: Project
+- formatter: DateTimeFormatter
+- filter: Boolean
++ Printer(Project r)
++ Printer(Project r, Boolean filt)
++ print()
++ printTimes(LocalDateTime initTime, LocalDateTime finalTime, int duration)
++ visitInterval(interval interval)
++ visitTask(task task)
++ visitProject(Project project)
 }
 
-class Visited{
+interface Visited{
++ abstract acceptVisitor(Visitor visitor)
 }
 
-class Visitor{
+interface Visitor{
++ abstract visitInterval(Interval interval)
++ abstract visitTask(Task task)
++ abstract visitProject(Project project)
+
+}
+
+class PropertyChangeListener{
++ abstract propertyChange(PropertyChangeEvent evt)
 }
 
 
 Project -up-|> Activity
 Task -up-|> Activity
-Project  *--> Activity
-Client --> Activity
-Task *-left- Interval
+Project  *--> "*" Activity
+Client --> Project
+Client --> Task
+Client --> Clock
+Client --> Printer
+Task "1" -right->"*" Interval
+Printer --> Clock : observes
+Clock -right-|> Thread
+Printer ..|> Visitor
+Activity ..|> Visited
+Interval ..|> Visited
+Printer ..|> PropertyChangeListener
+Interval ..|> PropertyChangeListener
 
 @enduml
