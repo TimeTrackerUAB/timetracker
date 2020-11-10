@@ -85,12 +85,16 @@ public class Project extends Activity {
   //Get the new duration and finalDate
   @Override
   public void update(LocalDateTime finalTime) {
+    //pre-condition
+    assert (finalTime.isBefore(this.getInitialDate())) : "finalTime is before initialTime";
+
     Duration dur = Duration.ZERO;
     for (Activity activity : activityList) {
       if (!activity.getDuration().isZero()) {
         dur = dur.plus(activity.getDuration());
       }
     }
+
     duration = dur;
     finalDate = finalTime;
     if (father != null) {
