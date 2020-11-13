@@ -5,10 +5,15 @@ import java.time.LocalDateTime;
 import java.util.Observable;
 import java.util.Observer;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //Class Interval
 //It allows you to create the representation of a time interval
 //from a start and end date
+
+//Implements Observer
+//Notifies some changes to the Clock (Observable)
 
 public class Interval implements Visited, Observer {
 
@@ -16,6 +21,7 @@ public class Interval implements Visited, Observer {
   private LocalDateTime finalTime;
   private Duration duration;
   private Task fatherTask;
+  static Logger logger = LoggerFactory.getLogger("Interval");
 
   //Constructor by default
   Interval(Task task) {
@@ -23,6 +29,7 @@ public class Interval implements Visited, Observer {
     duration = Duration.ZERO;
     initTime = null;
     finalTime = null;
+    logger.info("Adding a new interval in Task " + fatherTask.getName());
   }
 
   //Constructor with parameters
@@ -31,6 +38,7 @@ public class Interval implements Visited, Observer {
     this.duration = duration;
     this.initTime = initTime;
     this.finalTime = finalTime;
+    logger.info("Adding a new interval in Task " + fatherTask.getName());
   }
 
   //Getters
@@ -84,6 +92,9 @@ public class Interval implements Visited, Observer {
   public void update(Observable o, Object arg) {
     finalTime = Clock.getInstance().getDate();
     duration = duration.plusSeconds(Clock.getInstance().getPeriod() / 1000);
+    if (duration.getSeconds() > 20) {
+      logger.warn("Your spending more than 20 seconds in the Task, " + duration.getSeconds());
+    }
     fatherTask.update(finalTime);
   }
 }

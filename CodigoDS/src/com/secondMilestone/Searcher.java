@@ -25,6 +25,16 @@ public class Searcher implements Visitor {
 
   @Override
   public void visitTask(Task task) {
+
+  }
+
+  @Override
+  public void visitProject(Project project) {
+
+  }
+
+  @Override
+  public void searchTaskTag(Task task) {
     if (task.getTags() != null) {
       for (String taskTag : task.getTags()) {
         if (searchedTag.equals(taskTag)) {
@@ -39,7 +49,7 @@ public class Searcher implements Visitor {
   }
 
   @Override
-  public void visitProject(Project project) {
+  public void searchProjectTag(Project project) {
     for (Activity activity : project.getActivityList()) {
       activity.acceptVisitor(this);
     }

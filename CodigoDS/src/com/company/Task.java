@@ -4,9 +4,10 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //Class Task
 //It allows to create the representation of a task
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 public class Task extends Activity {
 
   private List<Interval> intervalList;
+  static Logger logger = LoggerFactory.getLogger("Activity.Task");
 
   //Constructor by default
   public Task() {
@@ -24,6 +26,7 @@ public class Task extends Activity {
   public Task(String name, Project father) {
     //super uses Activity constructor
     super(name, father);
+    logger.info("Adding a new task named " + name);
     father.addChild(this);
     intervalList = new ArrayList<Interval>();
 
@@ -33,6 +36,7 @@ public class Task extends Activity {
   public Task(String name, List<String> tags, Project father) {
     //super uses Activity constructor
     super(name, tags, father);
+    logger.info("Adding a new task named " + name);
     father.addChild(this);
     intervalList = new ArrayList<Interval>();
 
@@ -68,6 +72,8 @@ public class Task extends Activity {
   public void addChild(Interval interval) {
     intervalList.add(interval);
 
+    //post-condition
+    assert (!intervalList.isEmpty()) : "Interval was not added to the list";
     assert this.invariant();
   }
 
@@ -90,13 +96,16 @@ public class Task extends Activity {
   @Override
   public void acceptVisitor(Visitor visitor) {
     visitor.visitTask(this);
-
+    visitor.searchTaskTag(this);
     assert this.invariant();
   }
 
   //Get the new duration and finalDate
   @Override
   public void update(LocalDateTime finalTime) {
+    //pre-condition
+    assert (finalTime.isAfter(this.getInitialDate())) : "finalTime is before initialTime in Project";
+
     Duration dur = Duration.ZERO;
     for (Interval interval : intervalList) {
       if (!interval.getDuration().isZero()) {
@@ -106,11 +115,13 @@ public class Task extends Activity {
     duration = dur;
     finalDate = finalTime;
 
-    //es pot fer assert pq sempre té pare
-    if (father != null) {
-      father.update(finalTime);
-    }
+    //A Task always has a father Project
+    assert (father != null) : "the Task has no father Project";
+    father.update(finalTime);
 
+    //post-condition
+    assert (finalDate.isAfter(this.getInitialDate())) : "finalTime is before initialTime in Task";
+    assert (duration.getSeconds() >= 0) : "duration is negative in Task";
     assert this.invariant();
   }
 }

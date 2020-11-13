@@ -1,12 +1,13 @@
 package com.company;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 //Class Project
 //Allows you to create the representation of a project
@@ -15,9 +16,10 @@ import org.json.JSONObject;
 public class Project extends Activity {
 
   private List<Activity> activityList;
+  static Logger logger = LoggerFactory.getLogger("Activity.Project");
 
   private boolean invariant() {
-    return true;
+    return (name != null);
   }
 
   //Constructor by default
@@ -28,6 +30,7 @@ public class Project extends Activity {
   public Project(String name, Project father) {
     //super uses Activity constructor
     super(name, father);
+    logger.info("Adding a new project named " + name);
     activityList = new ArrayList<Activity>();
     if (father != null) {
       father.addChild(this);
@@ -39,6 +42,7 @@ public class Project extends Activity {
   public Project(String name, List<String> tags, Project father) {
     //super uses Activity constructor
     super(name, tags, father);
+    logger.info("Adding a new project named " + name);
     activityList = new ArrayList<Activity>();
     if (father != null) {
       father.addChild(this);
@@ -56,6 +60,8 @@ public class Project extends Activity {
   public void addChild(Activity activity) {
     activityList.add(activity);
 
+    //post-condition
+    assert (!activityList.isEmpty()) : "Activity was not added to the list";
     assert this.invariant();
   }
 
@@ -101,6 +107,7 @@ public class Project extends Activity {
   @Override
   public void acceptVisitor(Visitor visitor) {
     visitor.visitProject(this);
+    visitor.searchProjectTag(this);
 
     assert this.invariant();
   }
@@ -108,13 +115,15 @@ public class Project extends Activity {
   //Get the new duration and finalDate
   @Override
   public void update(LocalDateTime finalTime) {
+    //pre-condition
+    assert (finalTime.isAfter(this.getInitialDate())) : "finalTime is before initialTime in Project";
+
     Duration dur = Duration.ZERO;
     for (Activity activity : activityList) {
       if (!activity.getDuration().isZero()) {
         dur = dur.plus(activity.getDuration());
       }
     }
-
     duration = dur;
     finalDate = finalTime;
 
@@ -122,9 +131,13 @@ public class Project extends Activity {
       father.update(finalTime);
     }
 
-    //post-condition
-    assert (finalTime.isAfter(this.getInitialDate())) : "finalTime is before initialTime";
+    if (duration.getSeconds() > 20) {
+      logger.warn("Your spending more than 20 seconds in the Task, " + duration.getSeconds());
+    }
 
+    //post-condition
+    assert (finalDate.isAfter(this.getInitialDate())) : "finalDate is before initialTime in Project";
+    assert (duration.getSeconds() >= 0) : "duration is negative in Project";
     assert this.invariant();
   }
 

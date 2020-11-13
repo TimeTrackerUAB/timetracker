@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -98,12 +97,14 @@ public abstract class Activity implements Visited {
         father.setInitialDate(date);
       }
     }
+    logger.info("Setting initial date to Activity " + name);
   }
 
   public void setFinalDate(LocalDateTime date) {
     if (finalDate == null) {
       finalDate = date;
     }
+    logger.info("Setting final date");
   }
 
   public void setDuration(Duration duration) {
@@ -116,6 +117,7 @@ public abstract class Activity implements Visited {
 
   //Convert Activity properties into a JSONObject
   public JSONObject convertToJsonObject() {
+    logger.info("Starting JSON convertion");
     JSONObject act = new JSONObject();
     act.put("duration", duration.toSeconds());
     if (finalDate != null) {

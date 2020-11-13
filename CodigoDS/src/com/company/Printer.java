@@ -5,16 +5,22 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Observable;
 import java.util.Observer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //Class Printer
 //It allows the printing by console of the tree hierarchy
 //and the execution that we are asked for in the milestone1
+
+//Implements Observer
+//Notifies some changes to the Clock (Observable)
 
 public class Printer implements Visitor, Observer {
 
   private final Project root;
   private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd hh:mm:ss");
   private Boolean filter = false;
+  static Logger logger = LoggerFactory.getLogger("Printer");
 
   //Constructor by default
   public Printer() {
@@ -34,26 +40,24 @@ public class Printer implements Visitor, Observer {
   }
 
   //Print times and duration when they are not null
-  public void printTimes(LocalDateTime initTime, LocalDateTime finalTime, Duration duration) {
+  public void printTimes(String name, LocalDateTime initTime, LocalDateTime finalTime, Duration duration) {
     if (initTime != null && finalTime != null) {
-      System.out.print(initTime.format(formatter)
+      logger.debug(name + initTime.format(formatter)
           + "   " + finalTime.format(formatter)
           + "   " + duration.toSecondsPart());
     }
-    System.out.println();
   }
 
   //Get every Interval with their properties
   @Override
   public void visitInterval(Interval interval) {
+    String name = "interval:                     ";
     if (filter) {
       if (interval.getFinalTime() == Clock.getInstance().getDate()) {
-        System.out.print("interval:                     ");
-        printTimes(interval.getInitTime(), interval.getFinalTime(), interval.getDuration());
+        printTimes(name, interval.getInitTime(), interval.getFinalTime(), interval.getDuration());
       }
     } else {
-      System.out.print("interval:                     ");
-      printTimes(interval.getInitTime(), interval.getFinalTime(), interval.getDuration());
+      printTimes(name, interval.getInitTime(), interval.getFinalTime(), interval.getDuration());
     }
   }
 
@@ -63,20 +67,19 @@ public class Printer implements Visitor, Observer {
     for (Interval interval : task.getIntervalList()) {
       interval.acceptVisitor(this);
     }
+    String name = "activity:   " + task.getName();
     if (filter) {
       if (task.getFinalDate() == Clock.getInstance().getDate()) {
-        System.out.print("activity:   " + task.getName());
         for (int i = task.getName().length(); i < 18; i++) {
-          System.out.print(" ");
+          name = name + " ";
         }
-        printTimes(task.getInitialDate(), task.getFinalDate(), task.getDuration());
+        printTimes(name, task.getInitialDate(), task.getFinalDate(), task.getDuration());
       }
     } else {
-      System.out.print("activity:   " + task.getName());
       for (int i = task.getName().length(); i < 18; i++) {
-        System.out.print(" ");
+        name = name + " ";
       }
-      printTimes(task.getInitialDate(), task.getFinalDate(), task.getDuration());
+      printTimes(name, task.getInitialDate(), task.getFinalDate(), task.getDuration());
     }
   }
 
@@ -86,21 +89,30 @@ public class Printer implements Visitor, Observer {
     for (Activity activity : project.getActivityList()) {
       activity.acceptVisitor(this);
     }
+    String name = "activity:   " + project.getName();
     if (filter) {
       if (project.getFinalDate() == Clock.getInstance().getDate()) {
-        System.out.print("activity:   " + project.getName());
         for (int i = project.getName().length(); i < 18; i++) {
-          System.out.print(" ");
+          name = name + " ";
         }
-        printTimes(project.getInitialDate(), project.getFinalDate(), project.getDuration());
+        printTimes(name, project.getInitialDate(), project.getFinalDate(), project.getDuration());
       }
     } else {
-      System.out.print("activity:   " + project.getName());
       for (int i = project.getName().length(); i < 18; i++) {
-        System.out.print(" ");
+        name = name + " ";
       }
-      printTimes(project.getInitialDate(), project.getFinalDate(), project.getDuration());
+      printTimes(name, project.getInitialDate(), project.getFinalDate(), project.getDuration());
     }
+  }
+
+  @Override
+  public void searchTaskTag(Task task) {
+
+  }
+
+  @Override
+  public void searchProjectTag(Project project) {
+
   }
 
   @Override

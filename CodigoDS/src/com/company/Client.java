@@ -1,10 +1,6 @@
 package com.company;
 
 import com.secondMilestone.Searcher;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -14,6 +10,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 public class Client {
 
@@ -118,13 +117,13 @@ public class Client {
       System.out.println("end of test");
 
       //save project root to be able to write in JSONFile
-      projectRoot = root;
+
 
     } else {
       Printer printer = new Printer(root, false);
       printer.print();
     }
-
+    projectRoot = root;
   }
 
   public static void writeJsonFile() throws IOException {
@@ -178,8 +177,7 @@ public class Client {
 
   public static void searchByTag(String tag) throws InterruptedException {
     startTest(false);
-    Project root = new Project("root", null);
-    Searcher searcher = new Searcher(root, tag);
+    Searcher searcher = new Searcher(projectRoot, tag);
     searcher.print();
   }
 
