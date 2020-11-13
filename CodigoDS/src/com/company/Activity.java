@@ -2,6 +2,9 @@ package com.company;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -14,7 +17,7 @@ import org.slf4j.LoggerFactory;
 public abstract class Activity implements Visited {
 
   protected String name;
-  protected String description;
+  protected List<String> tags;
   protected LocalDateTime initialDate;
   protected LocalDateTime finalDate;
   protected Duration duration;
@@ -42,18 +45,23 @@ public abstract class Activity implements Visited {
   //Constructor by default
   public Activity() {
     name = "";
-    description = "";
+    tags = new ArrayList<>();
     father = null;
     initialDate = null;
     finalDate = null;
     duration = Duration.ZERO;
   }
 
-  //Constructor with parameters
-  public Activity(String activityName, String activityDescription, Project fatherProject) {
+  public Activity(String activityName, Project father) {
     name = activityName;
-    description = activityDescription;
-    father = fatherProject;
+    this.father = father;
+    duration = Duration.ZERO;
+  }
+
+  public Activity(String activityName, List<String> tags, Project father) {
+    name = activityName;
+    this.tags = tags;
+    this.father = father;
     duration = Duration.ZERO;
   }
 
@@ -62,8 +70,8 @@ public abstract class Activity implements Visited {
     return name;
   }
 
-  public String getDescription() {
-    return description;
+  public List<String> getTags() {
+    return tags;
   }
 
   public Duration getDuration() {
@@ -121,7 +129,13 @@ public abstract class Activity implements Visited {
       act.put("initialDate", "null");
     }
     act.put("father", father.getName());
-    act.put("description", description);
+    /* PREGUNTAR SI S'HA DE GUARDAR TAGS AL JSON
+    for (String tag : tags ) {
+      if (!tags.isEmpty()) {
+        act.put("tags", tag);
+      }
+    }
+     */
     act.put("name", name);
     JSONArray array = new JSONArray();
     //If the Activity is a Project

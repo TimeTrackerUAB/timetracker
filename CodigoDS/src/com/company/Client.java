@@ -1,15 +1,19 @@
 package com.company;
 
+import com.secondMilestone.Searcher;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 
 public class Client {
 
@@ -19,100 +23,108 @@ public class Client {
   Client() {
   }
 
-  public static void startTestA() {
+  public static void startTest(boolean ferTestB) throws InterruptedException {
 
     int period = 2000;
     Clock.getInstance().initialize(period);
+
+    List<String> tags = new ArrayList<>();
 
     //at the top level, projects software design, software testing,
     //databases and task transportation
-    Project root = new Project("root", "", null);
+    Project root = new Project("root", null);
 
-    Project softwareDesign = new Project("software design", "", root);
-    Project softwareTesting = new Project("software testing", "", root);
-    Project databases = new Project("databases", "", root);
-    Task transportation = new Task("transportation", "", root);
+    //tags for softwareDesign
+    tags.clear();
+    tags.add("java");
+    tags.add("flutter");
+    Project softwareDesign = new Project("software design", tags, root);
 
-    //under software design, projects problems and project time tracker
-    Project problems = new Project("problems", "", softwareDesign);
-    Project projectTimeTracker = new Project("project time tracker", "", softwareDesign);
+    //tags for softwareTesting
+    tags.clear();
+    tags.add("c++");
+    tags.add("Java");
+    tags.add("python");
+    Project softwareTesting = new Project("software testing", tags, root);
 
-    //under problems, tasks first list and second list
-    Task firstList = new Task("first list", "", problems);
-    Task secondList = new Task("second list", "", problems);
-
-    //under project time tracker, tasks read handout and first milestone
-    Task readHandout = new Task("read handout", "", projectTimeTracker);
-    Task firstMilestone = new Task("first milestone", "", projectTimeTracker);
-
-    Printer printer = new Printer(root, false);
-    printer.print();
-
-  }
-
-  public static void startTestB() throws InterruptedException {
-    //period in ms
-    int period = 2000;
-    Clock.getInstance().initialize(period);
-
-    //at the top level, projects software design,
-    //software testing, databases and task transportation
-    Project root = new Project("root", "", null);
-
-    Project softwareDesign = new Project("software design", "", root);
-    Project softwareTesting = new Project("software testing", "", root);
-    Project databases = new Project("databases", "", root);
-    Task transportation = new Task("transportation", "", root);
+    //tags for databases
+    tags.clear();
+    tags.add("SQL");
+    tags.add("python");
+    tags.add("C++");
+    Project databases = new Project("databases", tags, root);
+    Task transportation = new Task("transportation", root);
 
     //under software design, projects problems and project time tracker
-    Project problems = new Project("problems", "", softwareDesign);
-    Project projectTimeTracker = new Project("project time tracker", "", softwareDesign);
+
+    Project problems = new Project("problems", softwareDesign);
+    Project projectTimeTracker = new Project("project time tracker", softwareDesign);
 
     //under problems, tasks first list and second list
-    Task firstList = new Task("first list", "", problems);
-    Task secondList = new Task("second list", "", problems);
+
+    //tags for firstList
+    tags.clear();
+    tags.add("java");
+    Task firstList = new Task("first list", tags, problems);
+
+    //tags for secondList
+    tags.clear();
+    tags.add("Dart");
+    Task secondList = new Task("second list", tags, problems);
 
     //under project time tracker, tasks read handout and first milestone
-    Task readHandout = new Task("read handout", "", projectTimeTracker);
-    Task firstMilestone = new Task("first milestone", "", projectTimeTracker);
+    Task readHandout = new Task("read handout", projectTimeTracker);
 
-    Printer printer = new Printer(root, true);
-    Clock.getInstance().addObserver(printer);
+    //tags for firstMilestone
+    tags.clear();
+    tags.add("Java");
+    tags.add("IntelliJ");
+    Task firstMilestone = new Task("first milestone", tags, projectTimeTracker);
 
-    System.out.println("                              initial date          "
-        + "final date            duration");
-    System.out.println("start test");
-    //1. start task transportation, wait 4 seconds and then stop it
-    transportation.startTask();
-    Thread.sleep(4000);
-    transportation.stopTask();
-    //2. wait 2 seconds
-    Thread.sleep(2000);
-    //3. start task first list, wait 6 seconds
-    firstList.startTask();
-    Thread.sleep(6000);
-    //4. start task second list and wait 4 seconds
-    firstList.startTask();
-    Thread.sleep(4000);
-    //5. stop first list
-    firstList.stopTask();
-    //6. wait 2 seconds and then stop second list
-    Thread.sleep(2000);
-    secondList.stopTask();
-    //7. wait 2 seconds
-    Thread.sleep(2000);
-    //8. start transportation, wait 4 seconds and then stop it
-    transportation.startTask();
-    Thread.sleep(4000);
-    transportation.stopTask();
-    Thread.sleep(2000);
+    if (ferTestB) {
+      Printer printer = new Printer(root, true);
+      Clock.getInstance().addObserver(printer);
 
-    Clock.getInstance().deleteObserver(printer);
+      System.out.println("                              initial date          "
+          + "final date            duration");
+      System.out.println("start test");
+      //1. start task transportation, wait 4 seconds and then stop it
+      transportation.startTask();
+      Thread.sleep(4000);
+      transportation.stopTask();
+      //2. wait 2 seconds
+      Thread.sleep(2000);
+      //3. start task first list, wait 6 seconds
+      firstList.startTask();
+      Thread.sleep(6000);
+      //4. start task second list and wait 4 seconds
+      firstList.startTask();
+      Thread.sleep(4000);
+      //5. stop first list
+      firstList.stopTask();
+      //6. wait 2 seconds and then stop second list
+      Thread.sleep(2000);
+      secondList.stopTask();
+      //7. wait 2 seconds
+      Thread.sleep(2000);
+      //8. start transportation, wait 4 seconds and then stop it
+      transportation.startTask();
+      Thread.sleep(4000);
+      transportation.stopTask();
+      Thread.sleep(2000);
 
-    System.out.println("end of test");
+      Clock.getInstance().deleteObserver(printer);
 
-    //save project root to be able to write in JSONFile
-    projectRoot = root;
+      System.out.println("end of test");
+
+      //save project root to be able to write in JSONFile
+      projectRoot = root;
+
+    } else {
+      Printer printer = new Printer(root, false);
+      printer.print();
+    }
+
   }
 
   public static void writeJsonFile() throws IOException {
@@ -122,7 +134,13 @@ public class Client {
     root.put("finalDate", projectRoot.getFinalDate());
     root.put("initialDate", projectRoot.getInitialDate());
     root.put("father", "null");
-    root.put("description", projectRoot.getDescription());
+    /* PREGUNTAR SI CAL GUARDAR AL JSON ELS TAGS
+    for (String tag : projectRoot.getTags()) {
+      if (!projectRoot.getTags().isEmpty()) {
+        root.put("tags", tag);
+      }
+    }
+    */
     root.put("class", "project");
     JSONArray array = new JSONArray();
     for (Activity a : projectRoot.getActivityList()) {
@@ -144,10 +162,11 @@ public class Client {
   public static void readJsonFile() throws IOException {
     String resourceName = "root.json";
     BufferedReader br = new BufferedReader(new FileReader(resourceName));
-
+    //List<String> tags = new ArrayList<>();
     JSONTokener tokener = new JSONTokener(br);
     JSONObject object = new JSONObject(tokener);
-    Project root = new Project(object.getString("name"), "", null);
+    //Project root = new Project(object.getString("name"), tags, null);
+    Project root = new Project(object.getString("name"), null);
     root.setInitialDate(LocalDateTime.parse(object.getString("initialDate")));
     root.setFinalDate(LocalDateTime.parse(object.getString("finalDate")));
     root.setDuration(Duration.ofSeconds(object.getInt("duration")));
@@ -157,36 +176,58 @@ public class Client {
     printer.print();
   }
 
+  public static void searchByTag(String tag) throws InterruptedException {
+    startTest(false);
+    Project root = new Project("root", null);
+    Searcher searcher = new Searcher(root, tag);
+    searcher.print();
+  }
+
   public static void main(String[] args) throws InterruptedException {
     // Main
     Scanner sc = new Scanner(System.in);
-    String test = null;
-    while (test != "Q") {
+    String test = "";
+    while (!test.equals("Q")) {
       System.out.println("Choose test:");
       System.out.println("- Test A : Create Tree --> type 'A'");
       System.out.println("- Test B : Create and Execute Tree --> type 'B'");
       System.out.println("- Test C : Create JSON file from Test B --> type 'C'");
       System.out.println("- Test D : Read JSON file");
+      System.out.println("- Test E : Search by tag");
       System.out.println("- Q : Quit");
       System.out.print("Option: ");
       test = sc.nextLine();
       System.out.println("");
-      if (test.equals("A")) {
-        startTestA();
-      } else if (test.equals("B")) {
-        startTestB();
-      } else if (test.equals("C")) {
-        try {
-          writeJsonFile();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      } else if (test.equals("D")) {
-        try {
-          readJsonFile();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+
+      switch (test) {
+        case "A":
+          startTest(false);
+          break;
+        case "B":
+          startTest(true);
+          break;
+        case "C":
+          try {
+            writeJsonFile();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+          break;
+        case "D":
+          try {
+            readJsonFile();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+          break;
+        case "E":
+          System.out.println("Insert tag: ");
+          test = sc.nextLine();
+          searchByTag(test);
+          break;
+        default:
+          System.out.print("Invalid option");
+          break;
       }
       System.out.println();
     }

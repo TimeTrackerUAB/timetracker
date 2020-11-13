@@ -84,10 +84,6 @@ public class Interval implements Visited, Observer {
   public void update(Observable o, Object arg) {
     finalTime = Clock.getInstance().getDate();
     duration = duration.plusSeconds(Clock.getInstance().getPeriod() / 1000);
-
-    //post-condition
-    assert (duration.getSeconds() > 0) : "duration is negative";
-
     fatherTask.update(finalTime);
   }
 }

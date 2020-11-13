@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,19 +16,35 @@ public class Project extends Activity {
 
   private List<Activity> activityList;
 
+  private boolean invariant() {
+    return true;
+  }
+
   //Constructor by default
   public Project() {
     super();
   }
 
-  //Constructor with parameters
-  public Project(String name, String description, Project father) {
+  public Project(String name, Project father) {
     //super uses Activity constructor
-    super(name, description, father);
+    super(name, father);
     activityList = new ArrayList<Activity>();
     if (father != null) {
       father.addChild(this);
     }
+
+    assert this.invariant();
+  }
+
+  public Project(String name, List<String> tags, Project father) {
+    //super uses Activity constructor
+    super(name, tags, father);
+    activityList = new ArrayList<Activity>();
+    if (father != null) {
+      father.addChild(this);
+    }
+
+    assert this.invariant();
   }
 
   //Getters
@@ -38,20 +55,22 @@ public class Project extends Activity {
   //Insert activity to children list
   public void addChild(Activity activity) {
     activityList.add(activity);
+
+    assert this.invariant();
   }
 
   //Create tree of Activities from a JSONObject
   @Override
   public void createTree(Activity father, JSONObject object) {
     //Find children in JSONObject converting it to a JSONArray to be able to iterate it
-    JSONArray childs = object.getJSONArray("childs");
-    for (int i = 0; i < childs.length(); i++) {
+    JSONArray children = object.getJSONArray("childs");
+    for (int i = 0; i < children.length(); i++) {
       //Convert to JSONObject to be able to use getString() and get the properties
-      JSONObject obj = childs.getJSONObject(i);
-
+      JSONObject obj = children.getJSONObject(i);
+      List<String> tags = new ArrayList<>();
       //If the activity is a Project
       if (obj.getString("class").equals("project")) {
-        Project project = new Project(obj.getString("name"), "", (Project) father);
+        Project project = new Project(obj.getString("name"), tags, (Project) father);
         if (!obj.getString("initialDate").equals("null")) {
           project.setInitialDate(LocalDateTime.parse(obj.getString("initialDate")));
         }
@@ -63,7 +82,7 @@ public class Project extends Activity {
 
         //If the activity is a Task
       } else if (obj.getString("class").equals("task")) {
-        Task task = new Task(obj.getString("name"), "", (Project) father);
+        Task task = new Task(obj.getString("name"), tags, (Project) father);
         if (!obj.getString("initialDate").equals("null")) {
           task.setInitialDate(LocalDateTime.parse(obj.getString("initialDate")));
         }
@@ -75,19 +94,20 @@ public class Project extends Activity {
       }
 
     }
+
+    assert this.invariant();
   }
 
   @Override
   public void acceptVisitor(Visitor visitor) {
     visitor.visitProject(this);
+
+    assert this.invariant();
   }
 
   //Get the new duration and finalDate
   @Override
   public void update(LocalDateTime finalTime) {
-    //pre-condition
-    assert (finalTime.isBefore(this.getInitialDate())) : "finalTime is before initialTime";
-
     Duration dur = Duration.ZERO;
     for (Activity activity : activityList) {
       if (!activity.getDuration().isZero()) {
@@ -97,9 +117,15 @@ public class Project extends Activity {
 
     duration = dur;
     finalDate = finalTime;
+
     if (father != null) {
       father.update(finalTime);
     }
+
+    //post-condition
+    assert (finalTime.isAfter(this.getInitialDate())) : "finalTime is before initialTime";
+
+    assert this.invariant();
   }
 
 }
