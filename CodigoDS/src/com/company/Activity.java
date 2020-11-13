@@ -55,6 +55,7 @@ public abstract class Activity implements Visited {
     name = activityName;
     this.father = father;
     duration = Duration.ZERO;
+    tags = new ArrayList<String>();
   }
 
   public Activity(String activityName, List<String> tags, Project father) {
@@ -111,6 +112,7 @@ public abstract class Activity implements Visited {
     this.duration = duration;
   }
 
+  public void addTag(String tag){this.tags.add(tag);}
 
   //Abstract class for createTree methods of Activities types
   public abstract void createTree(Activity father, JSONObject object);

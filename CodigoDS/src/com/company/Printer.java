@@ -106,16 +106,6 @@ public class Printer implements Visitor, Observer {
   }
 
   @Override
-  public void searchTaskTag(Task task) {
-
-  }
-
-  @Override
-  public void searchProjectTag(Project project) {
-
-  }
-
-  @Override
   public void update(Observable o, Object arg) {
     print();
   }

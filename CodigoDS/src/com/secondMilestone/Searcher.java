@@ -13,9 +13,13 @@ public class Searcher implements Visitor {
   }
 
   //Call acceptVisitor function of the main Project
-  public void print() {
+  public void search() {
     assert root != null;
     root.acceptVisitor(this);
+  }
+
+  public void printFound(Activity activity){
+    System.out.println(activity.getName());
   }
 
   @Override
@@ -25,43 +29,24 @@ public class Searcher implements Visitor {
 
   @Override
   public void visitTask(Task task) {
-
-  }
-
-  @Override
-  public void visitProject(Project project) {
-
-  }
-
-  @Override
-  public void searchTaskTag(Task task) {
-    if (task.getTags() != null) {
-      for (String taskTag : task.getTags()) {
-        if (searchedTag.equals(taskTag)) {
-          System.out.print("activity:   " + task.getName());
-          for (int i = task.getName().length(); i < 18; i++) {
-            System.out.print(" ");
-          }
-          System.out.print("tag:   " + taskTag);
+    if(task.getTags()!=null) {
+      for (String tag : task.getTags()) {
+        if (searchedTag.equals(tag)) {
+          printFound(task);
         }
       }
     }
   }
 
   @Override
-  public void searchProjectTag(Project project) {
+  public void visitProject(Project project) {
     for (Activity activity : project.getActivityList()) {
       activity.acceptVisitor(this);
     }
-
-    if (project.getTags() != null) {
-      for (String projectTag : project.getTags()) {
-        if (searchedTag.equals(projectTag)) {
-          System.out.print("activity:   " + project.getName());
-          for (int i = project.getName().length(); i < 18; i++) {
-            System.out.print(" ");
-          }
-          System.out.print("tag:   " + projectTag);
+    if(project.getTags()!=null) {
+      for (String tag : project.getTags()) {
+        if (searchedTag.equals(tag)) {
+          printFound(project);
         }
       }
     }

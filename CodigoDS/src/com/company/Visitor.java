@@ -6,8 +6,4 @@ public interface Visitor {
   void visitTask(Task task);
 
   void visitProject(Project project);
-
-  void searchTaskTag(Task task);
-
-  void searchProjectTag(Project project);
 }

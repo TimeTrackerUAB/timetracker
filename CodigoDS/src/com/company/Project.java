@@ -107,8 +107,6 @@ public class Project extends Activity {
   @Override
   public void acceptVisitor(Visitor visitor) {
     visitor.visitProject(this);
-    visitor.searchProjectTag(this);
-
     assert this.invariant();
   }
 

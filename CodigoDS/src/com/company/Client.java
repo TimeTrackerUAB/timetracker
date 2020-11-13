@@ -34,24 +34,22 @@ public class Client {
     Project root = new Project("root", null);
 
     //tags for softwareDesign
-    tags.clear();
-    tags.add("java");
-    tags.add("flutter");
-    Project softwareDesign = new Project("software design", tags, root);
+    Project softwareDesign = new Project("software design", root);
+    softwareDesign.addTag("java");
+    softwareDesign.addTag("flutter");
 
     //tags for softwareTesting
-    tags.clear();
-    tags.add("c++");
-    tags.add("Java");
-    tags.add("python");
-    Project softwareTesting = new Project("software testing", tags, root);
+    Project softwareTesting = new Project("software testing", root);
+    softwareTesting.addTag("c++");
+    softwareTesting.addTag("Java");
+    softwareTesting.addTag("python");
 
     //tags for databases
-    tags.clear();
-    tags.add("SQL");
-    tags.add("python");
-    tags.add("C++");
-    Project databases = new Project("databases", tags, root);
+    Project databases = new Project("databases", root);
+    databases.addTag("SQL");
+    databases.addTag("python");
+    databases.addTag("C++");
+
     Task transportation = new Task("transportation", root);
 
     //under software design, projects problems and project time tracker
@@ -62,23 +60,20 @@ public class Client {
     //under problems, tasks first list and second list
 
     //tags for firstList
-    tags.clear();
-    tags.add("java");
-    Task firstList = new Task("first list", tags, problems);
+    Task firstList = new Task("first list", problems);
+    firstList.addTag("java");
 
     //tags for secondList
-    tags.clear();
-    tags.add("Dart");
-    Task secondList = new Task("second list", tags, problems);
+    Task secondList = new Task("second list", problems);
+    secondList.addTag("Dart");
 
     //under project time tracker, tasks read handout and first milestone
     Task readHandout = new Task("read handout", projectTimeTracker);
 
     //tags for firstMilestone
-    tags.clear();
-    tags.add("Java");
-    tags.add("IntelliJ");
-    Task firstMilestone = new Task("first milestone", tags, projectTimeTracker);
+    Task firstMilestone = new Task("first milestone", projectTimeTracker);
+    firstMilestone.addTag("Java");
+    firstMilestone.addTag("IntelliJ");
 
     if (ferTestB) {
       Printer printer = new Printer(root, true);
@@ -178,7 +173,7 @@ public class Client {
   public static void searchByTag(String tag) throws InterruptedException {
     startTest(false);
     Searcher searcher = new Searcher(projectRoot, tag);
-    searcher.print();
+    searcher.search();
   }
 
   public static void main(String[] args) throws InterruptedException {

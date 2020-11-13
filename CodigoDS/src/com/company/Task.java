@@ -96,7 +96,6 @@ public class Task extends Activity {
   @Override
   public void acceptVisitor(Visitor visitor) {
     visitor.visitTask(this);
-    visitor.searchTaskTag(this);
     assert this.invariant();
   }
 
