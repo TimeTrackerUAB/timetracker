@@ -40,7 +40,8 @@ public class Printer implements Visitor, Observer {
   }
 
   //Print times and duration when they are not null
-  public void printTimes(String name, LocalDateTime initTime, LocalDateTime finalTime, Duration duration) {
+  public void printTimes(String name, LocalDateTime initTime,
+                         LocalDateTime finalTime, Duration duration) {
     if (initTime != null && finalTime != null) {
       logger.debug(name + initTime.format(formatter)
           + "   " + finalTime.format(formatter)

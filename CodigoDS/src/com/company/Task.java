@@ -103,7 +103,8 @@ public class Task extends Activity {
   @Override
   public void update(LocalDateTime finalTime) {
     //pre-condition
-    assert (finalTime.isAfter(this.getInitialDate())) : "finalTime is before initialTime in Project";
+    assert (finalTime.isAfter(this.getInitialDate())) :
+        "finalTime is before initialTime in Task";
 
     Duration dur = Duration.ZERO;
     for (Interval interval : intervalList) {

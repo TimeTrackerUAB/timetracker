@@ -18,7 +18,7 @@ public class Searcher implements Visitor {
     root.acceptVisitor(this);
   }
 
-  public void printFound(Activity activity){
+  public void printFound(Activity activity) {
     System.out.println(activity.getName());
   }
 
@@ -29,7 +29,7 @@ public class Searcher implements Visitor {
 
   @Override
   public void visitTask(Task task) {
-    if(task.getTags()!=null) {
+    if (task.getTags() != null) {
       for (String tag : task.getTags()) {
         if (searchedTag.equals(tag)) {
           printFound(task);
@@ -43,7 +43,7 @@ public class Searcher implements Visitor {
     for (Activity activity : project.getActivityList()) {
       activity.acceptVisitor(this);
     }
-    if(project.getTags()!=null) {
+    if (project.getTags() != null) {
       for (String tag : project.getTags()) {
         if (searchedTag.equals(tag)) {
           printFound(project);

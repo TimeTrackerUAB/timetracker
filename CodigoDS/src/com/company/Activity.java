@@ -1,13 +1,14 @@
 package com.company;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 //Class Activity
 //It allows you to create or generate the tree hierarchy
@@ -112,7 +113,9 @@ public abstract class Activity implements Visited {
     this.duration = duration;
   }
 
-  public void addTag(String tag){this.tags.add(tag);}
+  public void addTag(String tag) {
+    this.tags.add(tag);
+  }
 
   //Abstract class for createTree methods of Activities types
   public abstract void createTree(Activity father, JSONObject object);

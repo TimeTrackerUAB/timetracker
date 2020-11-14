@@ -1,13 +1,13 @@
 package com.company;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //Class Project
 //Allows you to create the representation of a project
@@ -114,7 +114,8 @@ public class Project extends Activity {
   @Override
   public void update(LocalDateTime finalTime) {
     //pre-condition
-    assert (finalTime.isAfter(this.getInitialDate())) : "finalTime is before initialTime in Project";
+    assert (finalTime.isAfter(this.getInitialDate())) :
+        "finalTime is before initialTime in Project";
 
     Duration dur = Duration.ZERO;
     for (Activity activity : activityList) {
@@ -134,7 +135,8 @@ public class Project extends Activity {
     }
 
     //post-condition
-    assert (finalDate.isAfter(this.getInitialDate())) : "finalDate is before initialTime in Project";
+    assert (finalDate.isAfter(this.getInitialDate())) :
+        "finalDate is before initialTime in Project";
     assert (duration.getSeconds() >= 0) : "duration is negative in Project";
     assert this.invariant();
   }
