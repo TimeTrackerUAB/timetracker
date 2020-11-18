@@ -20,7 +20,7 @@ public class Printer implements Visitor, Observer {
   private final Project root;
   private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd hh:mm:ss");
   private Boolean filter = false;
-  static Logger logger = LoggerFactory.getLogger("Printer");
+  static Logger logger = LoggerFactory.getLogger("com.company.Printer");
 
   //Constructor by default
   public Printer() {

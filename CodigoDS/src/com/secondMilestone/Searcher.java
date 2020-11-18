@@ -8,7 +8,7 @@ public class Searcher implements Visitor {
 
   private final Project root;
   protected String searchedTag;
-  static Logger logger = LoggerFactory.getLogger("Searcher");
+  static Logger logger = LoggerFactory.getLogger("com.secondMilestone.Searcher");
 
   public Searcher(Project root, String searchedTag) {
     this.root = root;

@@ -25,7 +25,7 @@ public class Clock extends Observable {
   private LocalDateTime date;
   private Timer timer;
   private int period;
-  static Logger logger = LoggerFactory.getLogger("Clock");
+  static Logger logger = LoggerFactory.getLogger("com.company.Clock");
 
   //Constructor
   Clock() {

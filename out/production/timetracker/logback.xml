@@ -9,8 +9,8 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator>
-                <expression>return name.contains("Activity");</expression>
+            <evaluator> <!-- defaults to type ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
+                <expression>logger.equals("com.company.Activity")</expression>
             </evaluator>
             <OnMismatch>NEUTRAL</OnMismatch>
             <OnMatch>DENY</OnMatch>

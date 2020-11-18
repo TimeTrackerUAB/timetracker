@@ -4,7 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public abstract class Activity implements Visited {
   protected LocalDateTime finalDate;
   protected Duration duration;
   protected Project father;
-  static Logger logger = LoggerFactory.getLogger("Activity");
+  static Logger logger = LoggerFactory.getLogger("com.company.Activity");
 
   //INITIAL DATE
   //For projects, initialDate will be the creation date of the first interval of the

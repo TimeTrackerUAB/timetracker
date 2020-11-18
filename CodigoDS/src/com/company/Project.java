@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 public class Project extends Activity {
 
   private List<Activity> activityList;
-  static Logger logger = LoggerFactory.getLogger("Activity.Project");
+  static Logger logger = LoggerFactory.getLogger("com.company.Activity.Project");
 
   private boolean invariant() {
     return (name != null);

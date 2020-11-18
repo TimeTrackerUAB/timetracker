@@ -21,7 +21,7 @@ public class Interval implements Visited, Observer {
   private LocalDateTime finalTime;
   private Duration duration;
   private Task fatherTask;
-  static Logger logger = LoggerFactory.getLogger("Interval");
+  static Logger logger = LoggerFactory.getLogger("com.company.Interval");
 
   //Constructor by default
   Interval(Task task) {
