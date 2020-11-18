@@ -8,6 +8,7 @@ abstract class Activity{
 - finalDate: LocalDateTime
 - duration: int
 - father: Project
+- logger: Logger
 + Activity()
 + Activity(String name, String description, Project father)
 + String getName()
@@ -27,7 +28,7 @@ abstract class Activity{
 
 class Task{
 - intervalList: List<Interval>
-- nIntervals: int
+- logger: Logger
 + Task()
 + Task(String name, String description, Project father)
 + List<Interval> getIntervalList()
@@ -41,6 +42,7 @@ class Task{
 
 class Project{
 - activityList: List<Activity>
+- logger: Logger
 + Project()
 + Project(String name, String description, Project father)
 + List<Activity> getActivityList()
@@ -55,8 +57,8 @@ class Clock{
 - clock: Clock
 - date: LocalDateTime
 - timer: Timer
-- support: PropertyChangeSupport
 - period: int
+- logger: Logger
 + Clock()
 + Clock getInstance()
 + LocalDateTime getDate()
@@ -74,6 +76,7 @@ class Interval{
 - finalTime: LocalDateTime
 - duration: int
 - fatherTask: Task
+- logger: Logger
 + Interval(Task task)
 + Interval(Task father, LocalDateTime iTime, LocalDateTime fTime, int dur)
 + LocalDateTime getInitTime()
@@ -99,6 +102,7 @@ class Printer{
 - root: Project
 - formatter: DateTimeFormatter
 - filter: Boolean
+- logger: Logger
 + Printer(Project r)
 + Printer(Project r, Boolean filt)
 + print()
@@ -116,11 +120,18 @@ interface Visitor{
 + abstract visitInterval(Interval interval)
 + abstract visitTask(Task task)
 + abstract visitProject(Project project)
-
 }
 
-class PropertyChangeListener{
-+ abstract propertyChange(PropertyChangeEvent evt)
+class Searcher{
+- root: Project
+- searchedTag: String
+- logger: Logger
++ Printer(Project r, String searchedTag)
++ print()
++ printFound(Activity activity)
++ visitInterval(interval interval)
++ visitTask(task task)
++ visitProject(Project project)
 }
 
 
@@ -131,13 +142,13 @@ Client --> Project
 Client --> Task
 Client --> Clock
 Client --> Printer
+Client --> Searcher
 Task "1" -right->"*" Interval
 Printer --> Clock : observes
 Clock -right-|> Thread
 Printer ..|> Visitor
+Searcher ..|> Visitor
 Activity ..|> Visited
 Interval ..|> Visited
-Printer ..|> PropertyChangeListener
-Interval ..|> PropertyChangeListener
 
 @enduml

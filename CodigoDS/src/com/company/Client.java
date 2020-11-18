@@ -128,13 +128,6 @@ public class Client {
     root.put("finalDate", projectRoot.getFinalDate());
     root.put("initialDate", projectRoot.getInitialDate());
     root.put("father", "null");
-    /* PREGUNTAR SI CAL GUARDAR AL JSON ELS TAGS
-    for (String tag : projectRoot.getTags()) {
-      if (!projectRoot.getTags().isEmpty()) {
-        root.put("tags", tag);
-      }
-    }
-    */
     root.put("class", "project");
     JSONArray array = new JSONArray();
     for (Activity a : projectRoot.getActivityList()) {
@@ -156,10 +149,8 @@ public class Client {
   public static void readJsonFile() throws IOException {
     String resourceName = "root.json";
     BufferedReader br = new BufferedReader(new FileReader(resourceName));
-    //List<String> tags = new ArrayList<>();
     JSONTokener tokener = new JSONTokener(br);
     JSONObject object = new JSONObject(tokener);
-    //Project root = new Project(object.getString("name"), tags, null);
     Project root = new Project(object.getString("name"), null);
     root.setInitialDate(LocalDateTime.parse(object.getString("initialDate")));
     root.setFinalDate(LocalDateTime.parse(object.getString("finalDate")));

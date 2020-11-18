@@ -136,13 +136,6 @@ public abstract class Activity implements Visited {
       act.put("initialDate", "null");
     }
     act.put("father", father.getName());
-    /* PREGUNTAR SI S'HA DE GUARDAR TAGS AL JSON
-    for (String tag : tags ) {
-      if (!tags.isEmpty()) {
-        act.put("tags", tag);
-      }
-    }
-     */
     act.put("name", name);
     JSONArray array = new JSONArray();
     //If the Activity is a Project

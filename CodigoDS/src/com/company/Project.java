@@ -138,6 +138,7 @@ public class Project extends Activity {
     assert (finalDate.isAfter(this.getInitialDate())) :
         "finalDate is before initialTime in Project";
     assert (duration.getSeconds() >= 0) : "duration is negative in Project";
+
     assert this.invariant();
   }
 

@@ -49,7 +49,7 @@ public class Task extends Activity {
   }
 
   private boolean invariant() {
-    return true;
+    return (father != null && name != null);
   }
 
   //New Interval is created and added to intervalList

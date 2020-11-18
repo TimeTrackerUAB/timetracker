@@ -1,11 +1,14 @@
 package com.secondMilestone;
 
 import com.company.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Searcher implements Visitor {
 
   private final Project root;
   protected String searchedTag;
+  static Logger logger = LoggerFactory.getLogger("Searcher");
 
   public Searcher(Project root, String searchedTag) {
     this.root = root;
@@ -19,7 +22,7 @@ public class Searcher implements Visitor {
   }
 
   public void printFound(Activity activity) {
-    System.out.println(activity.getName());
+    logger.debug(activity.getName());
   }
 
   @Override
