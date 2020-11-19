@@ -83,6 +83,13 @@ public class Project extends Activity {
         if (!obj.getString("finalDate").equals("null")) {
           project.setFinalDate(LocalDateTime.parse(obj.getString("finalDate")));
         }
+        if (obj.getInt("numberTags") != 0) {
+          JSONArray array = obj.getJSONArray("tags");
+          for (int j = 0; j < obj.getInt("numberTags"); j++) {
+            JSONObject tag = array.getJSONObject(j);
+            project.addTag(tag.getString("name"));
+          }
+        }
         project.setDuration(Duration.ofSeconds(obj.getInt("duration")));
         project.createTree(project, obj);
 
@@ -94,6 +101,13 @@ public class Project extends Activity {
         }
         if (!obj.getString("finalDate").equals("null")) {
           task.setFinalDate(LocalDateTime.parse(obj.getString("finalDate")));
+        }
+        if (obj.getInt("numberTags") != 0) {
+          JSONArray array = obj.getJSONArray("tags");
+          for (int j = 0; j < obj.getInt("numberTags"); j++) {
+            JSONObject tag = array.getJSONObject(j);
+            task.addTag(tag.getString("name"));
+          }
         }
         task.setDuration(Duration.ofSeconds(obj.getInt("duration")));
         task.createTree(task, obj);

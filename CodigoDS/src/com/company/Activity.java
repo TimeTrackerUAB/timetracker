@@ -1,13 +1,14 @@
 package com.company;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 //Class Activity
 //It allows you to create or generate the tree hierarchy
@@ -133,6 +134,16 @@ public abstract class Activity implements Visited {
       act.put("initialDate", initialDate);
     } else {
       act.put("initialDate", "null");
+    }
+    if (tags != null) {
+      JSONArray arrayTags = new JSONArray();
+      act.put("numberTags", tags.size());
+      for (String tag : tags) {
+        JSONObject obj = new JSONObject();
+        obj.put("name", tag);
+        arrayTags.put(obj);
+      }
+      act.put("tags", arrayTags);
     }
     act.put("father", father.getName());
     act.put("name", name);
