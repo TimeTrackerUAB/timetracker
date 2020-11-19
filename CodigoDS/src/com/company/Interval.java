@@ -56,12 +56,16 @@ public class Interval implements Visited, Observer {
 
   //Setters
   public void setFinalTime(LocalDateTime time) {
+    if (time == null) {
+      logger.error("Time is null");
+    }
     finalTime = time;
   }
 
   //Add to observers list the current interval and initialize initDate and
   //the father Task
   public void startInterval() {
+    logger.info("Staring interval...");
     Clock.getInstance().addObserver(this);
     initTime = Clock.getInstance().getDate();
     fatherTask.setInitialDate(initTime);
@@ -69,6 +73,7 @@ public class Interval implements Visited, Observer {
 
   //Remove the interval from observers list
   public void stopInterval() {
+    logger.info("Stopping interval...");
     Clock.getInstance().deleteObserver(this);
   }
 

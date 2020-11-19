@@ -18,6 +18,7 @@ public class Searcher implements Visitor {
   //Call acceptVisitor function of the main Project
   public void search() {
     assert root != null;
+    logger.info("Searching tag...");
     root.acceptVisitor(this);
   }
 
@@ -35,9 +36,12 @@ public class Searcher implements Visitor {
     if (task.getTags() != null) {
       for (String tag : task.getTags()) {
         if (searchedTag.equals(tag)) {
+          logger.info("tag found in Task " + task.getName());
           printFound(task);
         }
       }
+    } else {
+      logger.warn("Task " + task.getName() + " does not have any tags");
     }
   }
 
@@ -49,9 +53,12 @@ public class Searcher implements Visitor {
     if (project.getTags() != null) {
       for (String tag : project.getTags()) {
         if (searchedTag.equals(tag)) {
+          logger.info("tag found in Project " + project.getName());
           printFound(project);
         }
       }
+    } else {
+      logger.warn("Project " + project.getName() + " does not have any tags");
     }
   }
 }

@@ -1,13 +1,13 @@
 package com.company;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //Class Activity
 //It allows you to create or generate the tree hierarchy
@@ -145,15 +145,15 @@ public abstract class Activity implements Visited {
         array.put(obj);
       }
       act.put("class", "project");
-    }
-    //If the Activity is a Task
-    if (this instanceof Task) {
+    } else if (this instanceof Task) { //If the Activity is a Task
       //Get list of Task children and put into JSONArray
       for (Interval i : ((Task) this).getIntervalList()) {
         JSONObject obj = i.convertToJsonObject();
         array.put(obj);
       }
       act.put("class", "task");
+    } else {
+      logger.error("Activity must be Task or Project");
     }
     act.put("childs", array);
     return act;

@@ -35,6 +35,7 @@ public class Printer implements Visitor, Observer {
 
   //Call acceptVisitor function of the main Project
   public void print() {
+    logger.info("Printing tree...");
     assert root != null;
     root.acceptVisitor(this);
   }

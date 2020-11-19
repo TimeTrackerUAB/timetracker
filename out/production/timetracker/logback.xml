@@ -3,18 +3,11 @@
         <encoder> <pattern>
             %d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
         </pattern> </encoder>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <!-- <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>DEBUG</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
-        </filter>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator> <!-- defaults to type ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
-                <expression>logger.equals("com.company.Activity")</expression>
-            </evaluator>
-            <OnMismatch>NEUTRAL</OnMismatch>
-            <OnMatch>DENY</OnMatch>
-        </filter>
+        </filter> -->
     </appender>
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
@@ -33,5 +26,7 @@
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </root>
-    <logger name="Project" level="warn"/>
+    <!-- <logger name="com.company" level="error"/> -->
+    <!-- <logger name="com.secondMilestone" level="error"/> -->
+
 </configuration>
