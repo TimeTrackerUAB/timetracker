@@ -20,6 +20,7 @@ abstract class Activity{
 + setInitialDate(LocalDateTime date)
 + setFinalDate(LocalDateTime date)
 + setDuration(int dur)
++ addTag(String tag)
 + createTree(Activity father, JSONObject object)
 + JSONObject convertToJSONObject()
 + update()

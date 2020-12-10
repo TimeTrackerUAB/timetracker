@@ -15,6 +15,12 @@ import org.slf4j.LoggerFactory;
 //Implements Observer
 //Notifies some changes to the Clock (Observable)
 
+//Implements Visitor
+//Uses global visitor methods to visit
+//Tasks, Projects and Intervals to check their
+//current times
+
+
 public class Printer implements Visitor, Observer {
 
   private final Project root;

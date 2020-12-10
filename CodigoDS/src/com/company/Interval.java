@@ -15,6 +15,10 @@ import org.slf4j.LoggerFactory;
 //Implements Observer
 //Notifies some changes to the Clock (Observable)
 
+//Implements Visited
+//It implements the interface Visited to accept the
+//possible Visitors of it's class
+
 public class Interval implements Visited, Observer {
 
   private LocalDateTime initTime;

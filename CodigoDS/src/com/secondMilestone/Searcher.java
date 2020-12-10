@@ -4,6 +4,15 @@ import com.company.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//Class Searcher
+//It searches a tag entered by the user
+//iterating on the activities tree
+
+//Implements Visitor
+//Uses global visitor methods to visit
+//Tasks and Projects to check if they have the
+//searched tag
+
 public class Searcher implements Visitor {
 
   private final Project root;
