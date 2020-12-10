@@ -91,6 +91,7 @@ public class Project extends Activity {
           }
         }
         project.setDuration(Duration.ofSeconds(obj.getInt("duration")));
+        project.setId((obj.getInt("id")));
         project.createTree(project, obj);
 
         //If the activity is a Task
@@ -110,6 +111,7 @@ public class Project extends Activity {
           }
         }
         task.setDuration(Duration.ofSeconds(obj.getInt("duration")));
+        task.setId((obj.getInt("id")));
         task.createTree(task, obj);
       }
 
