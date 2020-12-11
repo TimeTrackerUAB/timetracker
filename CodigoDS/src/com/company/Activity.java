@@ -4,10 +4,13 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.webserver.GenerateId;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.UUID;
 
 //Class Activity
 //It allows you to create or generate the tree hierarchy
@@ -19,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class Activity implements Visited {
 
+  protected int id;
   protected String name;
   protected List<String> tags;
   protected LocalDateTime initialDate;
@@ -53,6 +57,7 @@ public abstract class Activity implements Visited {
     initialDate = null;
     finalDate = null;
     duration = Duration.ZERO;
+    id = GenerateId.getInstance().generateId();
   }
 
   public Activity(String activityName, Project father) {
@@ -60,6 +65,7 @@ public abstract class Activity implements Visited {
     this.father = father;
     duration = Duration.ZERO;
     tags = new ArrayList<String>();
+    id = GenerateId.getInstance().generateId();
   }
 
   public Activity(String activityName, List<String> tags, Project father) {
@@ -67,6 +73,7 @@ public abstract class Activity implements Visited {
     this.tags = tags;
     this.father = father;
     duration = Duration.ZERO;
+    id = GenerateId.getInstance().generateId();
   }
 
   //Getters
@@ -94,6 +101,8 @@ public abstract class Activity implements Visited {
     return finalDate;
   }
 
+  public int getId() { return id;}
+
   //Setters
   public void setInitialDate(LocalDateTime date) {
     if (initialDate == null) {
@@ -115,6 +124,8 @@ public abstract class Activity implements Visited {
   public void setDuration(Duration duration) {
     this.duration = duration;
   }
+
+  public void setId(int id) {this.id=id;}
 
   public void addTag(String tag) {
     this.tags.add(tag);
@@ -149,6 +160,7 @@ public abstract class Activity implements Visited {
       act.put("tags", arrayTags);
     }
     act.put("father", father.getName());
+    act.put("id",id);
     act.put("name", name);
     JSONArray array = new JSONArray();
     //If the Activity is a Project

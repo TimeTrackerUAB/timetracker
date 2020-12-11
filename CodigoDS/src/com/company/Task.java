@@ -87,6 +87,7 @@ public class Task extends Activity {
           LocalDateTime.parse(obj.getString("initialDate")),
           LocalDateTime.parse(obj.getString("finalDate")),
           (Duration.ofSeconds(obj.getInt("duration"))));
+      interval.setId(obj.getInt("id"));
       this.addChild(interval);
     }
 

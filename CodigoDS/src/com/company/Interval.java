@@ -4,6 +4,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Observable;
 import java.util.Observer;
+
+import com.webserver.GenerateId;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 public class Interval implements Visited, Observer {
 
+  private int id;
   private LocalDateTime initTime;
   private LocalDateTime finalTime;
   private Duration duration;
@@ -33,6 +36,7 @@ public class Interval implements Visited, Observer {
     duration = Duration.ZERO;
     initTime = null;
     finalTime = null;
+    id = GenerateId.getInstance().generateId();
     logger.info("Adding a new interval in Task " + fatherTask.getName());
   }
 
@@ -42,6 +46,7 @@ public class Interval implements Visited, Observer {
     this.duration = duration;
     this.initTime = initTime;
     this.finalTime = finalTime;
+    id = GenerateId.getInstance().generateId();
     logger.info("Adding a new interval in Task " + fatherTask.getName());
   }
 
@@ -58,6 +63,8 @@ public class Interval implements Visited, Observer {
     return duration;
   }
 
+  public int getId() {return id;}
+
   //Setters
   public void setFinalTime(LocalDateTime time) {
     if (time == null) {
@@ -65,6 +72,8 @@ public class Interval implements Visited, Observer {
     }
     finalTime = time;
   }
+
+  public void setId(int id) {this.id=id;}
 
   //Add to observers list the current interval and initialize initDate and
   //the father Task
@@ -94,6 +103,7 @@ public class Interval implements Visited, Observer {
     act.put("initialDate", initTime);
     act.put("father", fatherTask.getName());
     act.put("class", "interval");
+    act.put("id",id);
     return act;
   }
 
