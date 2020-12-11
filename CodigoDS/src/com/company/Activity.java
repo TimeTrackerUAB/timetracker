@@ -1,16 +1,15 @@
 package com.company;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.webserver.GenerateId;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.UUID;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 //Class Activity
 //It allows you to create or generate the tree hierarchy
@@ -101,7 +100,9 @@ public abstract class Activity implements Visited {
     return finalDate;
   }
 
-  public int getId() { return id;}
+  public int getId() {
+    return id;
+  }
 
   //Setters
   public void setInitialDate(LocalDateTime date) {
@@ -125,7 +126,9 @@ public abstract class Activity implements Visited {
     this.duration = duration;
   }
 
-  public void setId(int id) {this.id=id;}
+  public void setId(int id) {
+    this.id = id;
+  }
 
   public void addTag(String tag) {
     this.tags.add(tag);
@@ -160,7 +163,7 @@ public abstract class Activity implements Visited {
       act.put("tags", arrayTags);
     }
     act.put("father", father.getName());
-    act.put("id",id);
+    act.put("id", id);
     act.put("name", name);
     JSONArray array = new JSONArray();
     //If the Activity is a Project
