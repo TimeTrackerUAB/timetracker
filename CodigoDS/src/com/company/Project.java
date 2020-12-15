@@ -1,13 +1,14 @@
 package com.company;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 //Class Project
 //Allows you to create the representation of a project
@@ -156,6 +157,10 @@ public class Project extends Activity {
     assert (duration.getSeconds() >= 0) : "duration is negative in Project";
 
     assert this.invariant();
+  }
+
+  public Activity findActivityById(int id) {
+    return father;
   }
 
 }

@@ -191,4 +191,8 @@ public abstract class Activity implements Visited {
   //Abstract class for update methods of Activities types
   public abstract void update(LocalDateTime finalTime);
 
+  public abstract Activity findActivityById(int n);
+
+  public abstract JSONObject toJson(int n);
+
 }
