@@ -129,6 +129,7 @@ public class Client {
     root.put("duration", projectRoot.getDuration().toSeconds());
     root.put("finalDate", projectRoot.getFinalDate());
     root.put("initialDate", projectRoot.getInitialDate());
+    root.put("id", projectRoot.getId());
     root.put("father", "null");
     root.put("class", "project");
     JSONArray array = new JSONArray();

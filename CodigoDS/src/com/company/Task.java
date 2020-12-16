@@ -126,5 +126,14 @@ public class Task extends Activity {
     assert this.invariant();
   }
 
+  public Activity findActivityById(int id) {
+    return father;
+  }
+
+  public JSONObject toJson(int n) {
+    JSONObject act = new JSONObject();
+    return act;
+  }
+
 
 }
