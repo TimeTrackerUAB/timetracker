@@ -1,14 +1,14 @@
 package com.company;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.Observable;
-import java.util.Observer;
-
 import com.webserver.GenerateId;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Observable;
+import java.util.Observer;
 
 //Class Interval
 //It allows you to create the representation of a time interval
@@ -63,7 +63,9 @@ public class Interval implements Visited, Observer {
     return duration;
   }
 
-  public int getId() {return id;}
+  public int getId() {
+    return id;
+  }
 
   //Setters
   public void setFinalTime(LocalDateTime time) {
@@ -73,7 +75,9 @@ public class Interval implements Visited, Observer {
     finalTime = time;
   }
 
-  public void setId(int id) {this.id=id;}
+  public void setId(int id) {
+    this.id = id;
+  }
 
   //Add to observers list the current interval and initialize initDate and
   //the father Task
@@ -103,7 +107,7 @@ public class Interval implements Visited, Observer {
     act.put("initialDate", initTime);
     act.put("father", fatherTask.getName());
     act.put("class", "interval");
-    act.put("id",id);
+    act.put("id", id);
     return act;
   }
 

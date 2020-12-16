@@ -160,11 +160,68 @@ public class Project extends Activity {
   }
 
   public Activity findActivityById(int id) {
-    return father;
+    Activity activity = null;
+    if (this.getId() == id) {
+      activity = this;
+    } else {
+      if (!this.getActivityList().isEmpty()) {
+        for (Activity a : getActivityList()) {
+          activity = a.findActivityById(id);
+          if (activity != null) {
+            break;
+          }
+        }
+      }
+    }
+    return activity;
   }
 
   public JSONObject toJson(int n) {
     JSONObject act = new JSONObject();
+    if (n >= 0) {
+      n--;
+      act.put("duration", duration.toSeconds());
+      if (finalDate != null) {
+        act.put("finalDate", finalDate);
+      } else {
+        act.put("finalDate", "null");
+      }
+      if (initialDate != null) {
+        act.put("initialDate", initialDate);
+      } else {
+        act.put("initialDate", "null");
+      }
+      if (tags != null) {
+        JSONArray arrayTags = new JSONArray();
+        act.put("numberTags", tags.size());
+        for (String tag : tags) {
+          JSONObject obj = new JSONObject();
+          obj.put("name", tag);
+          arrayTags.put(obj);
+        }
+        act.put("tags", arrayTags);
+      }
+      if (father == null) {
+        act.put("father", "null");
+      } else {
+        act.put("father", father.getName());
+      }
+      act.put("id", id);
+      act.put("name", name);
+      JSONArray array = new JSONArray();
+      //Get list of Project children and put into JSONArray
+      for (Activity a : this.getActivityList()) {
+        JSONObject obj = a.toJson(n);
+        if (!obj.isEmpty()) {
+          array.put(obj);
+        }
+      }
+      if (!array.isEmpty()) {
+        act.put("childs", array);
+      }
+      act.put("class", "project");
+    }
+
     return act;
   }
 

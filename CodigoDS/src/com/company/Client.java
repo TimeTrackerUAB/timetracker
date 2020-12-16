@@ -149,6 +149,21 @@ public class Client {
     }
   }
 
+  public static void writeToJsonFile(int n) throws IOException {
+    JSONObject root = new JSONObject();
+    root = projectRoot.toJson(n);
+
+    try {
+      FileWriter myWriter = new FileWriter("root.json");
+      myWriter.write(String.valueOf(root));
+      myWriter.close();
+      System.out.println("Successfully wrote to the file.");
+    } catch (IOException e) {
+      System.out.println("An error occurred.");
+      e.printStackTrace();
+    }
+  }
+
   public static void readJsonFile() throws IOException {
     String resourceName = "root.json";
     BufferedReader br = new BufferedReader(new FileReader(resourceName));
@@ -170,6 +185,17 @@ public class Client {
     searcher.search();
   }
 
+  public static void testSearchId(int id) throws InterruptedException {
+    Activity activity = null;
+    activity = projectRoot.findActivityById(id);
+    if (activity != null) {
+      System.out.println(activity.getName());
+    } else {
+      System.out.println("Not found");
+    }
+
+  }
+
   public static void main(String[] args) throws InterruptedException {
     // Main
     Scanner sc = new Scanner(System.in);
@@ -181,6 +207,8 @@ public class Client {
       System.out.println("- Test C : Create JSON file from Test B --> type 'C'");
       System.out.println("- Test D : Read JSON file");
       System.out.println("- Test E : Search by tag");
+      System.out.println("- Test F : Search by id");
+      System.out.println("- Test G : Create toJson file from Test B --> type 'G'");
       System.out.println("- Q : Quit");
       System.out.print("Option: ");
       test = sc.nextLine();
@@ -211,6 +239,20 @@ public class Client {
           System.out.println("Insert tag: ");
           test = sc.nextLine();
           searchByTag(test);
+          break;
+        case "F":
+          System.out.println("Insert id: ");
+          test = sc.nextLine();
+          testSearchId(Integer.parseInt(test));
+          break;
+        case "G":
+          System.out.println("Insert depth: ");
+          test = sc.nextLine();
+          try {
+            writeToJsonFile(Integer.parseInt(test));
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
           break;
         default:
           System.out.print("Invalid option");
