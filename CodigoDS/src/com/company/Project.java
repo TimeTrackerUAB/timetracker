@@ -191,7 +191,7 @@ public class Project extends Activity {
       } else {
         act.put("initialDate", "null");
       }
-      if (tags != null) {
+      if (!tags.isEmpty()) {
         JSONArray arrayTags = new JSONArray();
         act.put("numberTags", tags.size());
         for (String tag : tags) {

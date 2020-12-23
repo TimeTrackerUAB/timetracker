@@ -17,6 +17,7 @@ import java.util.List;
 public class Task extends Activity {
 
   private List<Interval> intervalList;
+  private boolean active;
   static Logger logger = LoggerFactory.getLogger("Activity.Task");
 
   //Constructor by default
@@ -30,7 +31,7 @@ public class Task extends Activity {
     logger.info("Adding a new task named " + name);
     father.addChild(this);
     intervalList = new ArrayList<Interval>();
-
+    active = false;
     assert this.invariant();
   }
 
@@ -40,7 +41,7 @@ public class Task extends Activity {
     logger.info("Adding a new task named " + name);
     father.addChild(this);
     intervalList = new ArrayList<Interval>();
-
+    active = false;
     assert this.invariant();
   }
 
@@ -58,7 +59,7 @@ public class Task extends Activity {
     Interval interval = new Interval(this);
     interval.startInterval();
     intervalList.add(interval);
-
+    active = true;
     assert this.invariant();
   }
 
@@ -66,7 +67,7 @@ public class Task extends Activity {
     for (Interval interval : intervalList) {
       interval.stopInterval();
     }
-
+    active = false;
     assert this.invariant();
   }
 
@@ -150,7 +151,7 @@ public class Task extends Activity {
       } else {
         act.put("initialDate", "null");
       }
-      if (tags != null) {
+      if (!tags.isEmpty()) {
         JSONArray arrayTags = new JSONArray();
         act.put("numberTags", tags.size());
         for (String tag : tags) {
@@ -163,6 +164,7 @@ public class Task extends Activity {
       act.put("father", father.getName());
       act.put("id", id);
       act.put("name", name);
+      act.put("active", active);
       JSONArray array = new JSONArray();
       //Get list of Project children and put into JSONArray
       if (n >= 0) {

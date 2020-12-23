@@ -26,6 +26,7 @@ public class Interval implements Visited, Observer {
   private int id;
   private LocalDateTime initTime;
   private LocalDateTime finalTime;
+  private boolean active;
   private Duration duration;
   private Task fatherTask;
   static Logger logger = LoggerFactory.getLogger("com.company.Interval");
@@ -38,6 +39,7 @@ public class Interval implements Visited, Observer {
     finalTime = null;
     id = GenerateId.getInstance().generateId();
     logger.info("Adding a new interval in Task " + fatherTask.getName());
+    active = false;
   }
 
   //Constructor with parameters
@@ -48,6 +50,7 @@ public class Interval implements Visited, Observer {
     this.finalTime = finalTime;
     id = GenerateId.getInstance().generateId();
     logger.info("Adding a new interval in Task " + fatherTask.getName());
+    active = false;
   }
 
   //Getters
@@ -86,12 +89,15 @@ public class Interval implements Visited, Observer {
     Clock.getInstance().addObserver(this);
     initTime = Clock.getInstance().getDate();
     fatherTask.setInitialDate(initTime);
+    active = true;
+
   }
 
   //Remove the interval from observers list
   public void stopInterval() {
     logger.info("Stopping interval...");
     Clock.getInstance().deleteObserver(this);
+    active = false;
   }
 
   @Override
@@ -108,6 +114,7 @@ public class Interval implements Visited, Observer {
     act.put("father", fatherTask.getName());
     act.put("class", "interval");
     act.put("id", id);
+    act.put("active", active);
     return act;
   }
 
