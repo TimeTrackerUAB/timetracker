@@ -1,7 +1,10 @@
 package com.webserver;
 
 import com.company.Activity;
+import com.company.Project;
 import com.company.Task;
+import com.secondMilestone.Searcher;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -137,6 +140,14 @@ public class WebServer {
           body = "{}";
           break;
         }
+        case "search": {
+          String tag = tokens[1];
+          Searcher searcher = new Searcher((Project) root, tag);
+          searcher.search();
+          body = searcher.toJson().toString();
+          break;
+        }
+
         // TODO: add new task, project
         // TODO: edit task, project properties
         default:

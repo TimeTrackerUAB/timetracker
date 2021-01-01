@@ -1,8 +1,13 @@
 package com.secondMilestone;
 
 import com.company.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //Class Searcher
 //It searches a tag entered by the user
@@ -18,10 +23,13 @@ public class Searcher implements Visitor {
   private final Project root;
   protected String searchedTag;
   static Logger logger = LoggerFactory.getLogger("com.secondMilestone.Searcher");
+  protected List<Activity> activities;
+
 
   public Searcher(Project root, String searchedTag) {
     this.root = root;
     this.searchedTag = searchedTag;
+    activities = new ArrayList<>();
   }
 
   //Call acceptVisitor function of the main Project
@@ -29,6 +37,21 @@ public class Searcher implements Visitor {
     assert root != null;
     logger.info("Searching tag...");
     root.acceptVisitor(this);
+  }
+
+  public JSONObject toJson() {
+    JSONObject act = new JSONObject();
+    JSONArray arrayTags = new JSONArray();
+    if (!activities.isEmpty()) {
+      for (Activity activity : activities) {
+        JSONObject obj = new JSONObject();
+        obj.put("name", activity.getName());
+        obj.put("id", activity.getId());
+        arrayTags.put(obj);
+      }
+      act.put("activities", arrayTags);
+    }
+    return act;
   }
 
   public void printFound(Activity activity) {
@@ -47,6 +70,7 @@ public class Searcher implements Visitor {
         if (searchedTag.equals(tag)) {
           logger.info("tag found in Task " + task.getName());
           printFound(task);
+          activities.add(task);
         }
       }
     } else {
@@ -64,6 +88,7 @@ public class Searcher implements Visitor {
         if (searchedTag.equals(tag)) {
           logger.info("tag found in Project " + project.getName());
           printFound(project);
+          activities.add(project);
         }
       }
     } else {
