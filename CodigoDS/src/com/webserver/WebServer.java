@@ -115,17 +115,17 @@ public class WebServer {
     private String makeBodyAnswer(String[] tokens) {
       String body = "";
       switch (tokens[0]) {
-        case "get_tree" : {
+        case "get_tree": {
           int id = Integer.parseInt(tokens[1]);
           Activity activity = findActivityById(id);
-          assert (activity!=null);
+          assert (activity != null);
           body = activity.toJson(1).toString();
           break;
         }
         case "start": {
           int id = Integer.parseInt(tokens[1]);
           Activity activity = findActivityById(id);
-          assert (activity!=null);
+          assert (activity != null);
           Task task = (Task) activity;
           task.startTask();
           body = "{}";
@@ -134,7 +134,7 @@ public class WebServer {
         case "stop": {
           int id = Integer.parseInt(tokens[1]);
           Activity activity = findActivityById(id);
-          assert (activity!=null);
+          assert (activity != null);
           Task task = (Task) activity;
           task.stopTask();
           body = "{}";
@@ -145,6 +145,48 @@ public class WebServer {
           Searcher searcher = new Searcher((Project) root, tag);
           searcher.search();
           body = searcher.toJson().toString();
+          break;
+        }
+
+        case "add": {
+          //token 0 -> add
+          //token 1 -> id father
+          //token 2 -> name
+          //token 3 -> type (project/task)
+          //token 4 -> numTags
+          //token X -> tag
+
+          int id = Integer.parseInt(tokens[1]);
+          String name = tokens[2];
+          String type = tokens[3];
+          int numTags = Integer.parseInt(tokens[4]);
+
+          Activity fatherActivity = findActivityById(id);
+          if (type.equals("project")) {
+            Project newProject = new Project(name, (Project) fatherActivity);
+            if (numTags > 0) {
+              for (int i = 0; i < numTags; i++) {
+                String tag = tokens[i + 5];
+                newProject.addTag(tag);
+              }
+            }
+          } else if (type.equals("task")) {
+            Task newTask = new Task(name, (Project) fatherActivity);
+            if (numTags > 0) {
+              for (int i = 0; i < numTags; i++) {
+                String tag = tokens[i + 5];
+                newTask.addTag(tag);
+              }
+            }
+          }
+          body = "{}";
+          break;
+        }
+
+        case "get_full_tree": {
+          Activity activity = findActivityById(0);
+          assert (activity != null);
+          body = activity.toJson(10).toString();
           break;
         }
 

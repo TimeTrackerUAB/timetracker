@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 public class Printer implements Visitor, Observer {
 
   private final Project root;
-  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd hh:mm:ss");
+  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-mm-yyyy hh:mm:ss");
   private Boolean filter = false;
   static Logger logger = LoggerFactory.getLogger("com.company.Printer");
 
